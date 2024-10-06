@@ -132,16 +132,20 @@ async function getOrGenerateStory() {
 
 // 后台生成并缓存新故事的函数
 async function generateAndCacheStory() {
-try {
-    const newStory = await generateStory();
+  try {
+    console.log('开始后台生成新故事');
+    const newStory = await generateStory(); // 调用API生成新故事
     const currentTime = Date.now();
-    await redis.set('cached_story', newStory);
-    await redis.set('last_generation_time', currentTime.toString());
+
+    // 确保新故事成功缓存
+    await redis.set('cached_story', newStory); // 更新缓存中的故事
+    await redis.set('last_generation_time', currentTime.toString()); // 更新生成时间
     console.log('新故事已在后台生成并缓存');
-} catch (error) {
+  } catch (error) {
     console.error('后台生成新故事时出错:', error);
+  }
 }
-}
+
 
 app.get('/api/story', async (req, res) => {
   try {

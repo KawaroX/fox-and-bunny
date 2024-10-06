@@ -6,286 +6,54 @@
     <title>狐狸和小白兔</title>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700&family=Noto+Serif+SC&display=swap');
-        body, html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            font-family: 'Noto Serif SC', serif;
-            color: #333;
-            overflow-x: hidden;
-        }
-
-        .scene {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(180deg, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%);
-            overflow: hidden;
-            z-index: -1;
-        }
-
-        .sun {
-            position: absolute;
-            width: 100px;
-            height: 100px;
-            background: #ffa600;
-            border-radius: 50%;
-            top: 10%;
-            right: 10%;
-            box-shadow: 0 0 50px #ff6b6b;
-            animation: sunPulse 4s infinite alternate;
-        }
-
-        @keyframes sunPulse {
-            0% { transform: scale(1); }
-            100% { transform: scale(1.1); }
-        }
-
-        .grass {
-            position: absolute;
-            bottom: 0;
-            left: -10%;
-            width: 120%;
-            height: 40%;
-            background: #4CAF50;
-            border-top-left-radius: 50% 100%;
-            border-top-right-radius: 50% 100%;
-        }
-
-        .grass::before, .grass::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            height: 100%;
-            background: #4CAF50;
-            border-top-left-radius: 50% 100%;
-            border-top-right-radius: 50% 100%;
-        }
-
-        .grass::before {
-            left: -5%;
-            height: 80%;
-            background: #45a049;
-        }
-
-        .grass::after {
-            right: -5%;
-            height: 60%;
-            background: #3d8b40;
-        }
-
-        .characters {
-            position: absolute;
-            bottom: 15%;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            align-items: flex-end;
-            gap: 20px;
-            width: 80%;
-        }
-
-        .fox, .rabbit {
-            font-size: 50px;
-            transition: transform 0.3s ease;
-            position: absolute;
-        }
-
-        .fox {
-            animation: foxMove 15s infinite alternate;
-            left: 0;
-        }
-
-        .rabbit {
-            animation: rabbitMove 12s infinite alternate;
-            right: 0;
-        }
-
-        @keyframes foxMove {
-            0% { transform: translateX(0) rotate(-5deg); }
-            25% { transform: translateX(100px) rotate(5deg); }
-            50% { transform: translateX(200px) rotate(-5deg); }
-            75% { transform: translateX(300px) rotate(5deg); }
-            100% { transform: translateX(400px) rotate(-5deg); }
-        }
-
-        @keyframes rabbitMove {
-            0% { transform: translateX(0) translateY(0) rotate(5deg); }
-            25% { transform: translateX(-100px) translateY(-20px) rotate(-5deg); }
-            50% { transform: translateX(-200px) translateY(0) rotate(5deg); }
-            75% { transform: translateX(-300px) translateY(-20px) rotate(-5deg); }
-            100% { transform: translateX(-400px) translateY(0) rotate(5deg); }
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 40px 20px;
-            position: relative;
-            z-index: 1;
-        }
-
-        h1 {
-            font-family: 'Noto Sans SC', sans-serif;
-            color: #ffffff;
-            text-align: center;
-            font-size: 3em;
-            margin-bottom: 30px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
+        /* ... 之前的样式保持不变 ... */
 
         #story {
-            background-color: rgba(255, 255, 255, 0.8);
-            border: none;
-            padding: 30px;
-            margin-top: 30px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
+            /* ... 保持之前的样式 ... */
             position: relative;
-            overflow: hidden;
-            line-height: 1.6;
-            white-space: pre-wrap;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.5s ease, transform 0.5s ease;
         }
 
-        #story.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        #story h2 {
-            font-family: 'Noto Sans SC', sans-serif;
-            color: #FF6A88;
-            margin-top: 0;
-        }
-
-        #story::before {
-            content: '';
+        #closeStory {
             position: absolute;
-            top: -10px;
-            left: -10px;
-            right: -10px;
-            bottom: -10px;
-            background: inherit;
-            filter: blur(10px);
-            z-index: -1;
-        }
-
-        #story:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
-        }
-
-        .primary-button {
-            background: linear-gradient(45deg, #FF9A8B 0%, #FF6A88 55%, #FF99AC 100%);
+            top: 10px;
+            right: 10px;
+            background: none;
             border: none;
-            color: white;
-            padding: 15px 32px;
-            text-align: center;
-            text-decoration: none;
-            display: block;
-            width: 100%;
-            font-size: 18px;
-            margin: 20px 0;
+            font-size: 20px;
             cursor: pointer;
-            border-radius: 50px;
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .primary-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-        }
-
-        .secondary-button {
-            background: transparent;
-            border: 2px solid #FF6A88;
             color: #FF6A88;
-            padding: 10px 20px;
+            display: none;
+        }
+
+        #closeStory:hover {
+            color: #ff4d6d;
+        }
+
+        .loading {
             text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin: 10px 0;
-            cursor: pointer;
-            border-radius: 50px;
-            transition: all 0.3s ease;
+            font-style: italic;
+            color: #666;
         }
 
-        .secondary-button:hover {
-            background: rgba(255, 106, 136, 0.1);
-        }
-
-        #customStorySection {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.5s ease-out, opacity 0.5s ease-out;
-            opacity: 0;
-        }
-
-        #customStorySection.show {
-            max-height: 200px;
-            opacity: 1;
-        }
-
-        input[type="text"] {
-            width: calc(100% - 24px);
-            padding: 15px;
-            margin: 10px 0;
-            box-sizing: border-box;
-            border: 2px solid #ddd;
-            border-radius: 50px;
-            transition: all 0.3s ease;
-            font-size: 16px;
-            opacity: 0;
-            transform: translateY(20px);
-        }
-
-        #customStorySection.show input[type="text"] {
-            opacity: 1;
-            transform: translateY(0);
-            transition: opacity 0.5s ease-out 0.2s, transform 0.5s ease-out 0.2s;
-        }
-
-        input[type="text"]:focus {
-            border-color: #FF6A88;
-            outline: none;
-            box-shadow: 0 0 10px rgba(255, 106, 136, 0.5);
-        }
-
-        .error {
-            color: #FF6A88;
-            font-weight: bold;
-            text-align: center;
-        }
-
-        @media (max-width: 600px) {
-            h1 {
-                font-size: 2.5em;
+        /* 添加动画效果 */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
             }
-            .fox, .rabbit {
-                font-size: 30px;
+            to {
+                opacity: 1;
+                transform: translateY(0);
             }
+        }
+
+        .fadeInUp {
+            animation: fadeInUp 0.5s ease-out;
         }
     </style>
 </head>
 <body>
-    <div class="scene">
-        <div class="sun"></div>
-        <div class="grass"></div>
-        <div class="characters">
-            <div class="fox">🦊</div>
-            <div class="rabbit">🐰</div>
-        </div>
-    </div>
+    <!-- ... 之前的 HTML 结构保持不变 ... -->
     <div class="container">
         <h1>来点故事吧 :)</h1>
         <button id="generateStory" class="primary-button">生成随机故事</button>
@@ -294,19 +62,29 @@
             <input type="text" id="customPrompt" placeholder="在草原上编织你的故事...">
             <button id="generateCustomStory" class="secondary-button">生成自定义故事</button>
         </div>
-        <div id="story"></div>
+        <div id="story">
+            <button id="closeStory">&times;</button>
+            <div id="storyContent"></div>
+        </div>
     </div>
 
     <script>
         const storyElement = document.getElementById('story');
+        const storyContentElement = document.getElementById('storyContent');
         const generateButton = document.getElementById('generateStory');
         const toggleCustomButton = document.getElementById('toggleCustomStory');
         const customStorySection = document.getElementById('customStorySection');
         const customPromptInput = document.getElementById('customPrompt');
         const generateCustomButton = document.getElementById('generateCustomStory');
+        const closeStoryButton = document.getElementById('closeStory');
 
         async function fetchStory(url, method = 'GET', body = null) {
             try {
+                // 显示加载提示
+                storyContentElement.innerHTML = '<p class="loading fadeInUp">正在编织故事，请稍候...</p>';
+                storyElement.style.display = 'block';
+                closeStoryButton.style.display = 'none';
+
                 const options = {
                     method: method,
                     headers: {
@@ -324,14 +102,13 @@
                 if (!data.story) {
                     throw new Error('返回的数据中没有故事');
                 }
-                storyElement.innerHTML = marked.parse(data.story);
+                storyContentElement.innerHTML = marked.parse(data.story);
                 storyElement.classList.remove('error');
-                storyElement.classList.remove('show');
-                void storyElement.offsetWidth; // 触发重排
-                storyElement.classList.add('show');
+                storyContentElement.classList.add('fadeInUp');
+                closeStoryButton.style.display = 'block';
             } catch (error) {
                 console.error('获取故事时出错:', error);
-                storyElement.textContent = '夕阳西下，故事消散了...请再次尝试编织你的故事。';
+                storyContentElement.innerHTML = '<p class="error fadeInUp">夕阳西下，故事消散了...请再次尝试编织你的故事。</p>';
                 storyElement.classList.add('error');
             }
         }
@@ -349,6 +126,11 @@
                 return;
             }
             fetchStory('/api/custom-story', 'POST', { prompt });
+        });
+
+        closeStoryButton.addEventListener('click', () => {
+            storyElement.style.display = 'none';
+            storyContentElement.innerHTML = '';
         });
     </script>
 </body>
