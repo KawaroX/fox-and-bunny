@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>狐狸和小白兔</title>
-    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=ZCOOL+XiaoWei&family=ZCOOL+KuaiLe&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/markdown-it/12.3.2/markdown-it.min.js"></script>
+    <title>狐狸和小白兔的童话故事生成器</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=ZCOOL+XiaoWei&display=swap');
+
         body, html {
             margin: 0;
             padding: 0;
@@ -57,41 +57,36 @@
         .characters {
             position: absolute;
             bottom: 15%;
-            left: 0;
-            width: 100%;
-            height: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: flex-end;
+            gap: 20px;
         }
 
         .fox, .rabbit {
-            position: absolute;
             font-size: 50px;
             transition: transform 0.3s ease;
         }
 
         .fox {
-            left: 20%;
-            animation: foxMove 20s infinite alternate;
+            animation: foxMove 10s infinite alternate;
         }
 
         .rabbit {
-            right: 20%;
-            animation: rabbitMove 18s infinite alternate;
+            animation: rabbitMove 8s infinite alternate;
         }
 
         @keyframes foxMove {
-            0% { transform: translateX(0) rotate(-5deg); left: 10%; }
-            25% { transform: translateX(100px) rotate(5deg); left: 30%; }
-            50% { transform: translateX(200px) rotate(-5deg); left: 50%; }
-            75% { transform: translateX(100px) rotate(5deg); left: 70%; }
-            100% { transform: translateX(0) rotate(-5deg); left: 90%; }
+            0% { transform: translateX(-10px) rotate(-5deg); }
+            50% { transform: translateX(10px) rotate(5deg); }
+            100% { transform: translateX(-10px) rotate(-5deg); }
         }
 
         @keyframes rabbitMove {
-            0% { transform: translateY(0) rotate(5deg); right: 90%; }
-            25% { transform: translateY(-20px) rotate(-5deg); right: 70%; }
-            50% { transform: translateY(0) rotate(5deg); right: 50%; }
-            75% { transform: translateY(-20px) rotate(-5deg); right: 30%; }
-            100% { transform: translateY(0) rotate(5deg); right: 10%; }
+            0% { transform: translateY(0) rotate(5deg); }
+            50% { transform: translateY(-20px) rotate(-5deg); }
+            100% { transform: translateY(0) rotate(5deg); }
         }
 
         .container {
@@ -121,8 +116,6 @@
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
-            font-family: 'ZCOOL KuaiLe', cursive;
-            line-height: 1.6;
         }
 
         #story::before {
@@ -157,7 +150,6 @@
             border-radius: 50px;
             transition: all 0.3s ease;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            font-family: 'ZCOOL KuaiLe', cursive;
         }
 
         .primary-button:hover {
@@ -178,7 +170,6 @@
             cursor: pointer;
             border-radius: 50px;
             transition: all 0.3s ease;
-            font-family: 'ZCOOL KuaiLe', cursive;
         }
 
         .secondary-button:hover {
@@ -208,7 +199,6 @@
             font-size: 16px;
             opacity: 0;
             transform: translateY(20px);
-            font-family: 'ZCOOL XiaoWei', serif;
         }
 
         #customStorySection.show input[type="text"] {
@@ -237,58 +227,6 @@
                 font-size: 30px;
             }
         }
-
-        /* Markdown 样式 */
-        #story h1, #story h2, #story h3 {
-            color: #FF6A88;
-            margin-top: 20px;
-        }
-
-        #story p {
-            margin-bottom: 15px;
-        }
-
-        #story strong {
-            color: #4a2c2a;
-        }
-
-        #story em {
-            color: #6a4c4a;
-        }
-
-        #story ul, #story ol {
-            margin-left: 20px;
-        }
-
-        #story blockquote {
-            border-left: 3px solid #FF6A88;
-            padding-left: 10px;
-            margin-left: 0;
-            color: #666;
-        }
-
-        #story code {
-            background-color: #f0f0f0;
-            padding: 2px 4px;
-            border-radius: 4px;
-        }
-
-        #story pre {
-            background-color: #f0f0f0;
-            padding: 10px;
-            border-radius: 4px;
-            overflow-x: auto;
-        }
-
-        /* 文字动画 */
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .fade-in {
-            animation: fadeIn 2s ease-out;
-        }
     </style>
 </head>
 <body>
@@ -301,7 +239,7 @@
         </div>
     </div>
     <div class="container">
-        <h1>来点故事，睡个好觉吧 :)</h1>
+        <h1>狐狸和小白兔的童话故事生成器</h1>
         <button id="generateStory" class="primary-button">生成随机故事</button>
         <button id="toggleCustomStory" class="secondary-button">创作独特故事</button>
         <div id="customStorySection">
@@ -312,7 +250,6 @@
     </div>
 
     <script>
-        const md = window.markdownit();
         const storyElement = document.getElementById('story');
         const generateButton = document.getElementById('generateStory');
         const toggleCustomButton = document.getElementById('toggleCustomStory');
@@ -339,31 +276,13 @@
                 if (!data.story) {
                     throw new Error('返回的数据中没有故事');
                 }
-                const htmlContent = md.render(data.story);
-                animateText(htmlContent);
+                storyElement.textContent = data.story;
+                storyElement.classList.remove('error');
             } catch (error) {
                 console.error('获取故事时出错:', error);
                 storyElement.textContent = '夕阳西下，故事消散了...请再次尝试编织你的故事。';
                 storyElement.classList.add('error');
             }
-        }
-
-        function animateText(html) {
-            storyElement.innerHTML = '';
-            const tempDiv = document.createElement('div');
-            tempDiv.innerHTML = html;
-            const elements = tempDiv.childNodes;
-            let delay = 0;
-            elements.forEach((element) => {
-                const clone = element.cloneNode(true);
-                clone.style.opacity = '0';
-                storyElement.appendChild(clone);
-                setTimeout(() => {
-                    clone.classList.add('fade-in');
-                    clone.style.opacity = '1';
-                }, delay);
-                delay += 200; // 每个元素之间的延迟
-            });
         }
 
         generateButton.addEventListener('click', () => fetchStory('/api/story'));
