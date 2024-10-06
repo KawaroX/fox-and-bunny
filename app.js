@@ -47,23 +47,26 @@ async function checkRedisConnection() {
 }
 
 async function generateStory(prompt = "请生成一个简短的故事：") {
-  try {
-    const response = await axios.post('https://api.deepbricks.ai/v1/chat/completions', {
-      prompt: prompt,
-      max_tokens: 150
-    }, {
-      headers: {
-        'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
-        'Content-Type': 'application/json'
-      }
-    });
-    console.log('API Response:', response.data);
-    return response.data.choices[0].text.trim();
-  } catch (error) {
-    console.error('生成故事时出错:', error.response ? error.response.data : error.message);
-    return '抱歉，生成故事时遇到了问题。';
+    try {
+      const response = await axios.post('https://api.deepbricks.ai/v1/chat/completions', {
+        model: "gpt-4-turbo", // 或其他适合的模型
+        messages: [
+          { role: "user", content: prompt }
+        ],
+        max_tokens: 150
+      }, {
+        headers: {
+          'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
+          'Content-Type': 'application/json'
+        }
+      });
+      console.log('API Response:', response.data);
+      return response.data.choices[0].message.content.trim();
+    } catch (error) {
+      console.error('生成故事时出错:', error.response ? error.response.data : error.message);
+      return '抱歉，生成故事时遇到了问题。';
+    }
   }
-}
 
 async function getOrGenerateStory() {
   if (!(await checkRedisConnection())) {
