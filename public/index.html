@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>狐狸和小白兔的故事生成器</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        h1 {
+            color: #4a4a4a;
+        }
+        #story {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-top: 20px;
+        }
+        button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+    <h1>狐狸和小白兔的故事生成器</h1>
+    <button id="generateStory">生成随机故事</button>
+    <div>
+        <input type="text" id="customPrompt" placeholder="输入自定义提示...">
+        <button id="generateCustomStory">生成自定义故事</button>
+    </div>
+    <div id="story"></div>
+
+    <script>
+        const storyElement = document.getElementById('story');
+        const generateButton = document.getElementById('generateStory');
+        const customPromptInput = document.getElementById('customPrompt');
+        const generateCustomButton = document.getElementById('generateCustomStory');
+
+        generateButton.addEventListener('click', async () => {
+            try {
+                const response = await fetch('/api/story');
+                const data = await response.json();
+                storyElement.textContent = data.story;
+            } catch (error) {
+                console.error('Error:', error);
+                storyElement.textContent = '获取故事时出错，请稍后再试。';
+            }
+        });
+
+        generateCustomButton.addEventListener('click', async () => {
+            const prompt = customPromptInput.value;
+            if (!prompt) {
+                alert('请输入自定义提示！');
+                return;
+            }
+            try {
+                const response = await fetch('/api/custom-story', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ prompt }),
+                });
+                const data = await response.json();
+                storyElement.textContent = data.story;
+            } catch (error) {
+                console.error('Error:', error);
+                storyElement.textContent = '生成自定义故事时出错，请稍后再试。';
+            }
+        });
+    </script>
+</body>
+</html>
