@@ -4,9 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>狐狸和小白兔</title>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=ZCOOL+XiaoWei&display=swap');
-
+        @import url('https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=ZCOOL+XiaoWei&display=swap');
         body, html {
             margin: 0;
             padding: 0;
@@ -98,7 +99,7 @@
         }
 
         h1 {
-            font-family: 'Ma Shan Zheng', cursive;
+            font-family: 'ZCOOL KuaiLe', cursive;
             color: #ffffff;
             text-align: center;
             font-size: 3em;
@@ -116,6 +117,14 @@
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
+            line-height: 1.6;
+            white-space: pre-wrap;
+        }
+
+        #story h2 {
+            font-family: 'ZCOOL KuaiLe', cursive;
+            color: #FF6A88;
+            margin-top: 0;
         }
 
         #story::before {
@@ -276,7 +285,7 @@
                 if (!data.story) {
                     throw new Error('返回的数据中没有故事');
                 }
-                storyElement.textContent = data.story;
+                storyElement.innerHTML = marked.parse(data.story);
                 storyElement.classList.remove('error');
             } catch (error) {
                 console.error('获取故事时出错:', error);
