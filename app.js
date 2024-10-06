@@ -8,24 +8,22 @@ const app = express();
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Redis 配置
-let redis;
-try {
-  redis = new Redis(process.env.REDIS_URL, {
-    connectTimeout: 10000,
-    commandTimeout: 5000,
-    retryStrategy(times) {
-      const delay = Math.min(times * 50, 2000);
-      return delay;
-    },
-  });
-} catch (error) {
-  console.error('Failed to create Redis instance:', error);
-}
+const Redis = require('ioredis');
 
-redis.on('error', (error) => {
-  console.error('Redis error:', error);
+const redis = new Redis({
+  port: 18082, // 使用您的实际端口
+  host: 'redis-18082.c294.ap-northeast-1-2.ec2.redns.redis-cloud.com',
+  password: 'DqBZ0De3NEiOeRtmkYTOLHPTS5r34sQi',
+  retryStrategy: (times) => {
+    if (times > 3) {
+      return null; // 停止重试
+    }
+    return Math.min(times * 100, 3000); // 重试间隔，最大3秒
+  },
+  commandTimeout: 5000 // 设置命令超时为5秒
 });
+
+redis.on('error', (err) => console.error('Redis Error:', err));
 
 redis.on('connect', () => {
   console.log('Successfully connected to Redis');
@@ -49,7 +47,7 @@ async function checkRedisConnection() {
 async function generateStory(prompt = "请生成一个简短的故事：") {
   try {
     const response = await axios.post('https://api.deepbricks.ai/v1/chat/completions', {
-      model: "gpt-4-turbo",
+      model: "gpt-4o-mini",
       messages: [
         { role: "user", content: prompt }
       ],
@@ -58,62 +56,55 @@ async function generateStory(prompt = "请生成一个简短的故事：") {
       headers: {
         'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
         'Content-Type': 'application/json'
-      }
+      },
+      timeout: 10000 // 10秒超时
     });
+
     console.log('API Response:', JSON.stringify(response.data, null, 2));
-    if (!response.data || !response.data.choices || response.data.choices.length === 0) {
-      throw new Error('API 返回的数据格式不正确');
+
+    if (!response.data || !response.data.choices || !response.data.choices[0] || !response.data.choices[0].message) {
+      throw new Error('Invalid API response format');
     }
-    const generatedStory = response.data.choices[0].message.content.trim();
-    if (!generatedStory) {
-      throw new Error('生成的故事为空');
+
+    const story = response.data.choices[0].message.content.trim();
+    if (story.length < 20) { // 假设故事至少应该有20个字符
+      throw new Error('Generated story is too short');
     }
-    return generatedStory;
+
+    return story;
   } catch (error) {
     console.error('生成故事时出错:', error);
-    if (error.response) {
-      console.error('API错误响应:', error.response.data);
-    }
-    throw new Error('生成故事时遇到了问题: ' + error.message);
+    throw error;
   }
 }
 
 async function getOrGenerateStory() {
-    try {
-      console.log('开始获取或生成故事');
-      let story = await redis.get('cached_story');
-      let lastGenerationTime = await redis.get('last_generation_time');
-      const currentTime = Date.now();
-  
-      console.log('缓存状态:', { story: !!story, lastGenerationTime, currentTime });
-  
-      if (!story) {
-        console.log('没有缓存的故事，正在生成新故事');
-        story = await generateStory();
-        console.log('新故事生成完成:', story.substring(0, 50) + '...');
-        
-        await redis.set('cached_story', story);
-        await redis.set('last_generation_time', currentTime.toString());
-        console.log('新故事已缓存');
-      } else {
-        console.log('使用缓存的故事');
-      }
-  
-      if (!lastGenerationTime || currentTime - parseInt(lastGenerationTime) > 5000) {
-        console.log('缓存的故事已超过5秒，在后台生成新故事');
-        generateAndCacheStory().catch(console.error);
-      }
-  
-      if (!story) {
-        throw new Error('无法获取或生成有效的故事');
-      }
-  
-      return story;
-    } catch (error) {
-      console.error('获取或生成故事时出错:', error);
-      throw error;
+  try {
+    console.log('开始获取或生成故事');
+    let story = await redis.get('cached_story');
+    const lastGenerationTime = await redis.get('last_generation_time');
+    const currentTime = Date.now();
+
+    console.log('缓存状态:', { story: !!story, storyLength: story ? story.length : 0, lastGenerationTime, currentTime });
+
+    if (!story || story.length < 20 || !lastGenerationTime || currentTime - parseInt(lastGenerationTime) > 5000) {
+      console.log('需要生成新故事');
+      story = await generateStory();
+      console.log('新故事生成完成, 长度:', story.length);
+      
+      await redis.set('cached_story', story);
+      await redis.set('last_generation_time', currentTime.toString());
+      console.log('新故事已缓存');
+    } else {
+      console.log('使用缓存的故事, 长度:', story.length);
     }
+
+    return story;
+  } catch (error) {
+    console.error('获取或生成故事时出错:', error);
+    throw error;
   }
+}
 
 // 后台生成并缓存新故事的函数
 async function generateAndCacheStory() {
@@ -133,21 +124,21 @@ app.get('/api/story', async (req, res) => {
     console.log('收到获取故事的请求');
     const story = await getOrGenerateStory();
     console.log('成功获取故事，长度:', story.length);
-    if (!story || typeof story !== 'string' || story.length === 0) {
-      throw new Error('获取到的故事无效');
-    }
     res.json({ story });
   } catch (error) {
     console.error('处理请求时出错:', error);
+    let errorMessage = '获取故事时遇到了问题。请稍后再试。';
     if (error.response) {
       console.error('API错误响应:', error.response.data);
-      console.error('API错误状态码:', error.response.status);
+      errorMessage += ' API错误。';
     } else if (error.request) {
       console.error('未收到API响应');
+      errorMessage += ' 网络问题。';
     } else {
       console.error('请求设置错误:', error.message);
+      errorMessage += ' ' + error.message;
     }
-    res.status(500).json({ error: '获取故事时遇到了问题。请稍后再试。', details: error.message });
+    res.status(500).json({ error: errorMessage });
   }
 });
 
