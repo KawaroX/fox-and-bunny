@@ -6,13 +6,12 @@
     <title>狐狸和小白兔</title>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=ZCOOL+XiaoWei&display=swap');
-        @import url('https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=ZCOOL+XiaoWei&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC&display=swap');
         body, html {
             margin: 0;
             padding: 0;
             height: 100%;
-            font-family: 'ZCOOL XiaoWei', serif;
+            font-family: 'Noto Serif SC', serif;
             color: #333;
             overflow-x: hidden;
         }
@@ -47,12 +46,24 @@
 
         .grass {
             position: absolute;
-            bottom: 0;
-            width: 100%;
-            height: 40%;
-            background: #4CAF50;
+            bottom: -10%;
+            left: -5%;
+            width: 110%;
+            height: 50%;
+            background: linear-gradient(to top, #4CAF50, #45a049);
             border-top-left-radius: 50% 100%;
             border-top-right-radius: 50% 100%;
+            transform: rotate(-2deg);
+        }
+
+        .grass::after {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: 0;
+            width: 100%;
+            height: 20px;
+            background: linear-gradient(to bottom, rgba(69, 160, 73, 0.2), rgba(69, 160, 73, 0));
         }
 
         .characters {
@@ -63,31 +74,39 @@
             display: flex;
             align-items: flex-end;
             gap: 20px;
+            width: 80%;
         }
 
         .fox, .rabbit {
             font-size: 50px;
             transition: transform 0.3s ease;
+            position: absolute;
         }
 
         .fox {
-            animation: foxMove 10s infinite alternate;
+            animation: foxMove 15s infinite alternate;
+            left: 0;
         }
 
         .rabbit {
-            animation: rabbitMove 8s infinite alternate;
+            animation: rabbitMove 12s infinite alternate;
+            right: 0;
         }
 
         @keyframes foxMove {
-            0% { transform: translateX(-10px) rotate(-5deg); }
-            50% { transform: translateX(10px) rotate(5deg); }
-            100% { transform: translateX(-10px) rotate(-5deg); }
+            0% { transform: translateX(0) rotate(-5deg); }
+            25% { transform: translateX(100%) rotate(5deg); }
+            50% { transform: translateX(200%) rotate(-5deg); }
+            75% { transform: translateX(100%) rotate(5deg); }
+            100% { transform: translateX(0) rotate(-5deg); }
         }
 
         @keyframes rabbitMove {
-            0% { transform: translateY(0) rotate(5deg); }
-            50% { transform: translateY(-20px) rotate(-5deg); }
-            100% { transform: translateY(0) rotate(5deg); }
+            0% { transform: translateX(0) translateY(0) rotate(5deg); }
+            25% { transform: translateX(-100%) translateY(-20px) rotate(-5deg); }
+            50% { transform: translateX(-200%) translateY(0) rotate(5deg); }
+            75% { transform: translateX(-100%) translateY(-20px) rotate(-5deg); }
+            100% { transform: translateX(0) translateY(0) rotate(5deg); }
         }
 
         .container {
@@ -99,7 +118,7 @@
         }
 
         h1 {
-            font-family: 'ZCOOL KuaiLe', cursive;
+            font-family: 'Ma Shan Zheng', cursive;
             color: #ffffff;
             text-align: center;
             font-size: 3em;
@@ -119,10 +138,11 @@
             overflow: hidden;
             line-height: 1.6;
             white-space: pre-wrap;
+            opacity: 0;
         }
 
         #story h2 {
-            font-family: 'ZCOOL KuaiLe', cursive;
+            font-family: 'Ma Shan Zheng', cursive;
             color: #FF6A88;
             margin-top: 0;
         }
@@ -287,11 +307,26 @@
                 }
                 storyElement.innerHTML = marked.parse(data.story);
                 storyElement.classList.remove('error');
+                fadeInStory();
             } catch (error) {
                 console.error('获取故事时出错:', error);
                 storyElement.textContent = '夕阳西下，故事消散了...请再次尝试编织你的故事。';
                 storyElement.classList.add('error');
+                fadeInStory();
             }
+        }
+
+        function fadeInStory() {
+            storyElement.style.opacity = 0;
+            let opacity = 0;
+            const interval = setInterval(() => {
+                if (opacity >= 1) {
+                    clearInterval(interval);
+                } else {
+                    opacity += 0.1;
+                    storyElement.style.opacity = opacity;
+                }
+            }, 100);
         }
 
         generateButton.addEventListener('click', () => fetchStory('/api/story'));
