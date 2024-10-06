@@ -1,3 +1,4 @@
+const path = require('path');
 const express = require('express');
 const axios = require('axios');
 const Redis = require('ioredis');
@@ -6,6 +7,11 @@ const app = express();
 const redis = new Redis(process.env.REDIS_URL);
 
 app.use(express.json());
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
 
 async function generateStory(prompt = "请生成一个简短的故事：") {
     try {
@@ -68,3 +74,10 @@ app.post('/api/custom-story', async (req, res) => {
 });
 
 module.exports = app;
+
+if (process.env.NODE_ENV !== 'production') {
+    const port = process.env.PORT || 3000;
+    app.listen(port, () => {
+      console.log(`Server running on port ${port}`);
+    });
+  }
