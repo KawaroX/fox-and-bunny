@@ -6,7 +6,7 @@
     <title>狐狸和小白兔</title>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700&family=Noto+Serif+SC&display=swap');
         body, html {
             margin: 0;
             padding: 0;
@@ -46,24 +46,36 @@
 
         .grass {
             position: absolute;
-            bottom: -10%;
-            left: -5%;
-            width: 110%;
-            height: 50%;
-            background: linear-gradient(to top, #4CAF50, #45a049);
+            bottom: 0;
+            left: -10%;
+            width: 120%;
+            height: 40%;
+            background: #4CAF50;
             border-top-left-radius: 50% 100%;
             border-top-right-radius: 50% 100%;
-            transform: rotate(-2deg);
+        }
+
+        .grass::before, .grass::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 100%;
+            background: #4CAF50;
+            border-top-left-radius: 50% 100%;
+            border-top-right-radius: 50% 100%;
+        }
+
+        .grass::before {
+            left: -5%;
+            height: 80%;
+            background: #45a049;
         }
 
         .grass::after {
-            content: '';
-            position: absolute;
-            top: -10px;
-            left: 0;
-            width: 100%;
-            height: 20px;
-            background: linear-gradient(to bottom, rgba(69, 160, 73, 0.2), rgba(69, 160, 73, 0));
+            right: -5%;
+            height: 60%;
+            background: #3d8b40;
         }
 
         .characters {
@@ -95,18 +107,18 @@
 
         @keyframes foxMove {
             0% { transform: translateX(0) rotate(-5deg); }
-            25% { transform: translateX(100%) rotate(5deg); }
-            50% { transform: translateX(200%) rotate(-5deg); }
-            75% { transform: translateX(100%) rotate(5deg); }
-            100% { transform: translateX(0) rotate(-5deg); }
+            25% { transform: translateX(100px) rotate(5deg); }
+            50% { transform: translateX(200px) rotate(-5deg); }
+            75% { transform: translateX(300px) rotate(5deg); }
+            100% { transform: translateX(400px) rotate(-5deg); }
         }
 
         @keyframes rabbitMove {
             0% { transform: translateX(0) translateY(0) rotate(5deg); }
-            25% { transform: translateX(-100%) translateY(-20px) rotate(-5deg); }
-            50% { transform: translateX(-200%) translateY(0) rotate(5deg); }
-            75% { transform: translateX(-100%) translateY(-20px) rotate(-5deg); }
-            100% { transform: translateX(0) translateY(0) rotate(5deg); }
+            25% { transform: translateX(-100px) translateY(-20px) rotate(-5deg); }
+            50% { transform: translateX(-200px) translateY(0) rotate(5deg); }
+            75% { transform: translateX(-300px) translateY(-20px) rotate(-5deg); }
+            100% { transform: translateX(-400px) translateY(0) rotate(5deg); }
         }
 
         .container {
@@ -118,7 +130,7 @@
         }
 
         h1 {
-            font-family: 'Ma Shan Zheng', cursive;
+            font-family: 'Noto Sans SC', sans-serif;
             color: #ffffff;
             text-align: center;
             font-size: 3em;
@@ -139,10 +151,17 @@
             line-height: 1.6;
             white-space: pre-wrap;
             opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        #story.show {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         #story h2 {
-            font-family: 'Ma Shan Zheng', cursive;
+            font-family: 'Noto Sans SC', sans-serif;
             color: #FF6A88;
             margin-top: 0;
         }
@@ -307,26 +326,14 @@
                 }
                 storyElement.innerHTML = marked.parse(data.story);
                 storyElement.classList.remove('error');
-                fadeInStory();
+                storyElement.classList.remove('show');
+                void storyElement.offsetWidth; // 触发重排
+                storyElement.classList.add('show');
             } catch (error) {
                 console.error('获取故事时出错:', error);
                 storyElement.textContent = '夕阳西下，故事消散了...请再次尝试编织你的故事。';
                 storyElement.classList.add('error');
-                fadeInStory();
             }
-        }
-
-        function fadeInStory() {
-            storyElement.style.opacity = 0;
-            let opacity = 0;
-            const interval = setInterval(() => {
-                if (opacity >= 1) {
-                    clearInterval(interval);
-                } else {
-                    opacity += 0.1;
-                    storyElement.style.opacity = opacity;
-                }
-            }, 100);
         }
 
         generateButton.addEventListener('click', () => fetchStory('/api/story'));
