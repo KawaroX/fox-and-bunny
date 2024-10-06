@@ -150,14 +150,22 @@
             overflow: hidden;
             line-height: 1.6;
             white-space: pre-wrap;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.5s ease, transform 0.5s ease;
         }
 
-        #story.show {
-            opacity: 1;
-            transform: translateY(0);
+        #closeStory {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: #FF6A88;
+            display: none;
+        }
+
+        #closeStory:hover {
+            color: #ff4d6d;
         }
 
         #story h2 {
@@ -267,37 +275,12 @@
             text-align: center;
         }
 
-        @media (max-width: 600px) {
-            h1 {
-                font-size: 2.5em;
-            }
-            .fox, .rabbit {
-                font-size: 30px;
-            }
-        }
-        #closeStory {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: none;
-            border: none;
-            font-size: 20px;
-            cursor: pointer;
-            color: #FF6A88;
-            display: none;
-        }
-
-        #closeStory:hover {
-            color: #ff4d6d;
-        }
-
         .loading {
             text-align: center;
             font-style: italic;
             color: #666;
         }
 
-        /* 添加动画效果 */
         @keyframes fadeInUp {
             from {
                 opacity: 0;
@@ -311,6 +294,15 @@
 
         .fadeInUp {
             animation: fadeInUp 0.5s ease-out;
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2.5em;
+            }
+            .fox, .rabbit {
+                font-size: 30px;
+            }
         }
     </style>
 </head>
