@@ -8,8 +8,6 @@ const app = express();
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-const Redis = require('ioredis');
-
 const redis = new Redis({
   port: 18082, // 使用您的实际端口
   host: 'redis-18082.c294.ap-northeast-1-2.ec2.redns.redis-cloud.com',
