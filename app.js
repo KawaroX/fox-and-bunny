@@ -8,6 +8,21 @@ const app = express();
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
+const { body, validationResult } = require('express-validator');
+
+
+
+const rateLimit = require('express-rate-limit');
+
+const apiLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 分钟
+  max: 100, // 限制每个 IP 15 分钟内最多 100 个请求
+  message: '请求过于频繁，请稍后再试。'
+});
+
+// 将限制器应用到所有的 /api 路由
+app.use('/api', apiLimiter);
+
 const redis = new Redis({
   port: 18082, // 使用您的实际端口
   host: 'redis-18082.c294.ap-northeast-1-2.ec2.redns.redis-cloud.com',
@@ -42,20 +57,27 @@ async function checkRedisConnection() {
   }
 }
 
-async function generateStory(prompt = "请生成一个简短的故事：") {
+async function generateStory(prompt = "请生成一个有趣的短篇故事") {
   try {
     const response = await axios.post('https://api.deepbricks.ai/v1/chat/completions', {
       model: "gpt-4o-mini",
       messages: [
-        { role: "user", content: prompt }
+        { 
+          role: "system", 
+          content: "你是一个专业的儿童故事作家。你的任务是创作富有想象力、有教育意义、适合儿童的短篇故事。故事应该包含引人入胜的情节、生动的描述和有趣的对话。每个故事应该有一个明确的主题或道德寓意，但要以巧妙和吸引人的方式呈现。故事长度应该在300到500字之间。"
+        },
+        { 
+          role: "user", 
+          content: `请根据以下提示创作一个故事：${prompt}。文笔要优美语言流畅自然，颇有希金斯的风味，你的文字让人感觉像是秋天的落叶与清晨的雾气，在浩瀚璀璨的星海里飘荡着一叶孤舟，如银河般灿烂，如月球般纯洁，如月球海啸一般震撼。` 
+        }
       ],
-      max_tokens: 150
+      max_tokens: 1000,  // 增加 token 限制以允许更长的故事
+      temperature: 0.8   // 增加创造性
     }, {
       headers: {
         'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
         'Content-Type': 'application/json'
-      },
-      timeout: 10000 // 10秒超时
+      }
     });
 
     console.log('API Response:', JSON.stringify(response.data, null, 2));
@@ -65,10 +87,6 @@ async function generateStory(prompt = "请生成一个简短的故事：") {
     }
 
     const story = response.data.choices[0].message.content.trim();
-    if (story.length < 20) { // 假设故事至少应该有20个字符
-      throw new Error('Generated story is too short');
-    }
-
     return story;
   } catch (error) {
     console.error('生成故事时出错:', error);
@@ -140,19 +158,30 @@ app.get('/api/story', async (req, res) => {
   }
 });
 
-app.post('/api/custom-story', async (req, res) => {
+app.post('/api/custom-story', [
+  body('prompt').isString().trim().isLength({ min: 1, max: 500 }).withMessage('提示必须是1-500字符的字符串')
+], async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
   try {
-    const { prompt } = req.body;
-    const story = await generateStory(prompt);
+    const story = await generateStory(req.body.prompt);
     res.json({ story });
   } catch (error) {
-    console.error('处理自定义故事请求时出错:', error);
-    res.status(500).json({ error: '生成自定义故事时遇到了问题。' });
+    console.error('处理请求时出错:', error);
+    res.status(500).json({ error: '生成故事时遇到了问题。请稍后再试。' });
   }
 });
 
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send('Something broke!');
 });
 
 const port = process.env.PORT || 3000;
