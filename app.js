@@ -99,31 +99,25 @@ async function generateStory(prompt = "请生成一个有趣的短篇故事") {
 async function getOrGenerateStory() {
   try {
     console.log('开始获取或生成故事');
-
-    // 立即获取缓存的故事
     let story = await redis.get('cached_story');
     const lastGenerationTime = await redis.get('last_generation_time');
     const currentTime = Date.now();
 
-    console.log('缓存状态:', { story: !!story, lastGenerationTime, currentTime });
+    console.log('缓存状态:', { story: !!story, storyLength: story ? story.length : 0, lastGenerationTime, currentTime });
 
-    // 立即返回缓存的故事
-    if (story) {
-      console.log('使用缓存的故事, 长度:', story.length);
-      // 检查生成时间是否超过5秒
-      if (lastGenerationTime && currentTime - parseInt(lastGenerationTime) > 5000) {
-        console.log('缓存的故事存在时间超过5秒，开始生成新故事');
-        // 生成新故事但不等待
-        generateAndCacheStory();
-      }
-      return story; // 立即返回缓存的故事
-    } else {
-      console.log('没有找到缓存的故事，生成新故事');
-      story = await generateStory(); // 如果没有缓存的故事，生成新的
+    if (!story || story.length < 20 || !lastGenerationTime || currentTime - parseInt(lastGenerationTime) > 5000) {
+      console.log('需要生成新故事');
+      story = await generateStory();
+      console.log('新故事生成完成, 长度:', story.length);
+      
       await redis.set('cached_story', story);
       await redis.set('last_generation_time', currentTime.toString());
-      return story;
+      console.log('新故事已缓存');
+    } else {
+      console.log('使用缓存的故事, 长度:', story.length);
     }
+
+    return story;
   } catch (error) {
     console.error('获取或生成故事时出错:', error);
     throw error;
