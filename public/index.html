@@ -3,94 +3,320 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>狐狸和小白兔</title>
+    <title>梦幻童话故事生成器</title>
+    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=ZCOOL+XiaoWei&family=ZCOOL+KuaiLe&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/markdown-it/12.3.2/markdown-it.min.js"></script>
     <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(to bottom, #e0c3fc, #f9d2d2);
-            color: #3a3a3a;
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'ZCOOL XiaoWei', serif;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        .scene {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%);
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .sun {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background: #ffa600;
+            border-radius: 50%;
+            top: 10%;
+            right: 10%;
+            box-shadow: 0 0 50px #ff6b6b;
+            animation: sunPulse 4s infinite alternate;
+        }
+
+        @keyframes sunPulse {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.1); }
+        }
+
+        .grass {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 40%;
+            background: #4CAF50;
+            border-top-left-radius: 50% 100%;
+            border-top-right-radius: 50% 100%;
+        }
+
+        .characters {
+            position: absolute;
+            bottom: 15%;
+            left: 0;
+            width: 100%;
+            height: 100px;
+        }
+
+        .fox, .rabbit {
+            position: absolute;
+            font-size: 50px;
+            transition: transform 0.3s ease;
+        }
+
+        .fox {
+            left: 20%;
+            animation: foxMove 20s infinite alternate;
+        }
+
+        .rabbit {
+            right: 20%;
+            animation: rabbitMove 18s infinite alternate;
+        }
+
+        @keyframes foxMove {
+            0% { transform: translateX(0) rotate(-5deg); left: 10%; }
+            25% { transform: translateX(100px) rotate(5deg); left: 30%; }
+            50% { transform: translateX(200px) rotate(-5deg); left: 50%; }
+            75% { transform: translateX(100px) rotate(5deg); left: 70%; }
+            100% { transform: translateX(0) rotate(-5deg); left: 90%; }
+        }
+
+        @keyframes rabbitMove {
+            0% { transform: translateY(0) rotate(5deg); right: 90%; }
+            25% { transform: translateY(-20px) rotate(-5deg); right: 70%; }
+            50% { transform: translateY(0) rotate(5deg); right: 50%; }
+            75% { transform: translateY(-20px) rotate(-5deg); right: 30%; }
+            100% { transform: translateY(0) rotate(5deg); right: 10%; }
+        }
+
+        .container {
             max-width: 800px;
             margin: 0 auto;
-            padding: 40px;
-            line-height: 1.6;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
-            border-radius: 15px;
+            padding: 40px 20px;
+            position: relative;
+            z-index: 1;
         }
+
         h1 {
-            color: #5d3c91;
+            font-family: 'Ma Shan Zheng', cursive;
+            color: #ffffff;
             text-align: center;
             font-size: 3em;
             margin-bottom: 30px;
-            text-shadow: 2px 2px 5px rgba(255, 255, 255, 0.7);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
+
         #story {
-            background-color: rgba(255, 255, 255, 0.9);
-            border: 1px solid #ddd;
-            padding: 25px;
-            margin-top: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
-            transition: background-color 0.3s;
+            background-color: rgba(255, 255, 255, 0.8);
+            border: none;
+            padding: 30px;
+            margin-top: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            font-family: 'ZCOOL KuaiLe', cursive;
+            line-height: 1.6;
         }
+
+        #story::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            background: inherit;
+            filter: blur(10px);
+            z-index: -1;
+        }
+
         #story:hover {
-            background-color: rgba(255, 255, 255, 1);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
         }
-        button {
-            background: linear-gradient(to right, #ff6f61, #de5b91);
+
+        .primary-button {
+            background: linear-gradient(45deg, #FF9A8B 0%, #FF6A88 55%, #FF99AC 100%);
             border: none;
             color: white;
-            padding: 15px 30px;
+            padding: 15px 32px;
             text-align: center;
+            text-decoration: none;
+            display: block;
+            width: 100%;
             font-size: 18px;
+            margin: 20px 0;
+            cursor: pointer;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            font-family: 'ZCOOL KuaiLe', cursive;
+        }
+
+        .primary-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .secondary-button {
+            background: transparent;
+            border: 2px solid #FF6A88;
+            color: #FF6A88;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
             margin: 10px 0;
             cursor: pointer;
-            border-radius: 8px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-            transition: transform 0.2s;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            font-family: 'ZCOOL KuaiLe', cursive;
         }
-        button:hover {
-            transform: scale(1.05);
+
+        .secondary-button:hover {
+            background: rgba(255, 106, 136, 0.1);
         }
+
+        #customStorySection {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out, opacity 0.5s ease-out;
+            opacity: 0;
+        }
+
+        #customStorySection.show {
+            max-height: 200px;
+            opacity: 1;
+        }
+
         input[type="text"] {
             width: calc(100% - 24px);
-            padding: 12px 10px;
+            padding: 15px;
             margin: 10px 0;
             box-sizing: border-box;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            transition: border-color 0.3s;
+            border: 2px solid #ddd;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            font-size: 16px;
+            opacity: 0;
+            transform: translateY(20px);
+            font-family: 'ZCOOL XiaoWei', serif;
         }
+
+        #customStorySection.show input[type="text"] {
+            opacity: 1;
+            transform: translateY(0);
+            transition: opacity 0.5s ease-out 0.2s, transform 0.5s ease-out 0.2s;
+        }
+
         input[type="text"]:focus {
-            border-color: #ff6f61;
+            border-color: #FF6A88;
             outline: none;
+            box-shadow: 0 0 10px rgba(255, 106, 136, 0.5);
         }
+
         .error {
-            color: red;
+            color: #FF6A88;
             font-weight: bold;
             text-align: center;
         }
+
         @media (max-width: 600px) {
             h1 {
                 font-size: 2.5em;
             }
-            button {
-                width: 100%;
+            .fox, .rabbit {
+                font-size: 30px;
             }
+        }
+
+        /* Markdown 样式 */
+        #story h1, #story h2, #story h3 {
+            color: #FF6A88;
+            margin-top: 20px;
+        }
+
+        #story p {
+            margin-bottom: 15px;
+        }
+
+        #story strong {
+            color: #4a2c2a;
+        }
+
+        #story em {
+            color: #6a4c4a;
+        }
+
+        #story ul, #story ol {
+            margin-left: 20px;
+        }
+
+        #story blockquote {
+            border-left: 3px solid #FF6A88;
+            padding-left: 10px;
+            margin-left: 0;
+            color: #666;
+        }
+
+        #story code {
+            background-color: #f0f0f0;
+            padding: 2px 4px;
+            border-radius: 4px;
+        }
+
+        #story pre {
+            background-color: #f0f0f0;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+
+        /* 文字动画 */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .fade-in {
+            animation: fadeIn 2s ease-out;
         }
     </style>
 </head>
 <body>
-    <h1>来点故事，睡个好觉吧</h1>
-    <button id="generateStory">生成随机故事</button>
-    <div>
-        <input type="text" id="customPrompt" placeholder="输入自定义提示...">
-        <button id="generateCustomStory">生成自定义故事</button>
+    <div class="scene">
+        <div class="sun"></div>
+        <div class="grass"></div>
+        <div class="characters">
+            <div class="fox">🦊</div>
+            <div class="rabbit">🐰</div>
+        </div>
     </div>
-    <div id="story"></div>
+    <div class="container">
+        <h1>梦幻童话故事生成器</h1>
+        <button id="generateStory" class="primary-button">生成随机故事</button>
+        <button id="toggleCustomStory" class="secondary-button">创作独特故事</button>
+        <div id="customStorySection">
+            <input type="text" id="customPrompt" placeholder="在草原上编织你的故事...">
+            <button id="generateCustomStory" class="secondary-button">生成自定义故事</button>
+        </div>
+        <div id="story"></div>
+    </div>
 
     <script>
+        const md = window.markdownit();
         const storyElement = document.getElementById('story');
         const generateButton = document.getElementById('generateStory');
+        const toggleCustomButton = document.getElementById('toggleCustomStory');
+        const customStorySection = document.getElementById('customStorySection');
         const customPromptInput = document.getElementById('customPrompt');
         const generateCustomButton = document.getElementById('generateCustomStory');
 
@@ -113,21 +339,43 @@
                 if (!data.story) {
                     throw new Error('返回的数据中没有故事');
                 }
-                storyElement.textContent = data.story;
-                storyElement.classList.remove('error');
+                const htmlContent = md.render(data.story);
+                animateText(htmlContent);
             } catch (error) {
                 console.error('获取故事时出错:', error);
-                storyElement.textContent = '抱歉，获取故事时遇到了问题。请稍后再试。';
+                storyElement.textContent = '夕阳西下，故事消散了...请再次尝试编织你的故事。';
                 storyElement.classList.add('error');
             }
         }
 
+        function animateText(html) {
+            storyElement.innerHTML = '';
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = html;
+            const elements = tempDiv.childNodes;
+            let delay = 0;
+            elements.forEach((element) => {
+                const clone = element.cloneNode(true);
+                clone.style.opacity = '0';
+                storyElement.appendChild(clone);
+                setTimeout(() => {
+                    clone.classList.add('fade-in');
+                    clone.style.opacity = '1';
+                }, delay);
+                delay += 200; // 每个元素之间的延迟
+            });
+        }
+
         generateButton.addEventListener('click', () => fetchStory('/api/story'));
+
+        toggleCustomButton.addEventListener('click', () => {
+            customStorySection.classList.toggle('show');
+        });
 
         generateCustomButton.addEventListener('click', () => {
             const prompt = customPromptInput.value;
             if (!prompt) {
-                alert('请输入自定义提示！');
+                alert('请在草原上编织你的故事...');
                 return;
             }
             fetchStory('/api/custom-story', 'POST', { prompt });
