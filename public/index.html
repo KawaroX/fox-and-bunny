@@ -3,53 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>狐狸和小白兔的故事生成器</title>
+    <title>狐狸和小白兔</title>
     <style>
         body {
-            font-family: 'Georgia', serif;
-            background: linear-gradient(to bottom, #f0e4d7, #e0c3fc);
-            color: #333;
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(to bottom, #e0c3fc, #f9d2d2);
+            color: #3a3a3a;
             max-width: 800px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 40px;
             line-height: 1.6;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            border-radius: 10px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
         }
         h1 {
-            color: #4a2c2a;
+            color: #5d3c91;
             text-align: center;
-            font-size: 2.5em;
-            margin-bottom: 20px;
+            font-size: 3em;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 5px rgba(255, 255, 255, 0.7);
         }
         #story {
-            background-color: #ffffff;
+            background-color: rgba(255, 255, 255, 0.9);
             border: 1px solid #ddd;
-            padding: 20px;
+            padding: 25px;
             margin-top: 20px;
             border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
             transition: background-color 0.3s;
         }
         #story:hover {
-            background-color: #f7f7f7;
+            background-color: rgba(255, 255, 255, 1);
         }
         button {
-            background-color: #4CAF50;
+            background: linear-gradient(to right, #ff6f61, #de5b91);
             border: none;
             color: white;
-            padding: 15px 32px;
+            padding: 15px 30px;
             text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
+            font-size: 18px;
             margin: 10px 0;
             cursor: pointer;
-            border-radius: 5px;
-            transition: background-color 0.3s;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s;
         }
         button:hover {
-            background-color: #45a049;
+            transform: scale(1.05);
         }
         input[type="text"] {
             width: calc(100% - 24px);
@@ -61,7 +61,7 @@
             transition: border-color 0.3s;
         }
         input[type="text"]:focus {
-            border-color: #4CAF50;
+            border-color: #ff6f61;
             outline: none;
         }
         .error {
@@ -71,7 +71,7 @@
         }
         @media (max-width: 600px) {
             h1 {
-                font-size: 2em;
+                font-size: 2.5em;
             }
             button {
                 width: 100%;
@@ -80,7 +80,7 @@
     </style>
 </head>
 <body>
-    <h1>狐狸和小白兔的故事生成器</h1>
+    <h1>来点故事，睡个好觉吧</h1>
     <button id="generateStory">生成随机故事</button>
     <div>
         <input type="text" id="customPrompt" placeholder="输入自定义提示...">
