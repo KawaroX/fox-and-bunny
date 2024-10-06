@@ -39,6 +39,10 @@
             margin: 8px 0;
             box-sizing: border-box;
         }
+        .error {
+            color: red;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -56,37 +60,43 @@
         const customPromptInput = document.getElementById('customPrompt');
         const generateCustomButton = document.getElementById('generateCustomStory');
 
-        generateButton.addEventListener('click', async () => {
+        async function fetchStory(url, method = 'GET', body = null) {
             try {
-                const response = await fetch('/api/story');
+                const options = {
+                    method: method,
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                };
+                if (body) {
+                    options.body = JSON.stringify(body);
+                }
+                const response = await fetch(url, options);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
                 const data = await response.json();
+                if (!data.story) {
+                    throw new Error('返回的数据中没有故事');
+                }
                 storyElement.textContent = data.story;
+                storyElement.classList.remove('error');
             } catch (error) {
-                console.error('Error:', error);
-                storyElement.textContent = '获取故事时出错，请稍后再试。';
+                console.error('获取故事时出错:', error);
+                storyElement.textContent = '抱歉，获取故事时遇到了问题。请稍后再试。';
+                storyElement.classList.add('error');
             }
-        });
+        }
 
-        generateCustomButton.addEventListener('click', async () => {
+        generateButton.addEventListener('click', () => fetchStory('/api/story'));
+
+        generateCustomButton.addEventListener('click', () => {
             const prompt = customPromptInput.value;
             if (!prompt) {
                 alert('请输入自定义提示！');
                 return;
             }
-            try {
-                const response = await fetch('/api/custom-story', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ prompt }),
-                });
-                const data = await response.json();
-                storyElement.textContent = data.story;
-            } catch (error) {
-                console.error('Error:', error);
-                storyElement.textContent = '生成自定义故事时出错，请稍后再试。';
-            }
+            fetchStory('/api/custom-story', 'POST', { prompt });
         });
     </script>
 </body>
