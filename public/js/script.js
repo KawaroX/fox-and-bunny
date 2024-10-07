@@ -1,4 +1,11 @@
-// 在文件开头添加 debounce 函数
+/*
+ * 狐狸与小白兔
+ * Copyright (c) 2024 Luwavic
+ * 作者: Luwavic
+ * 许可证: MIT License
+ * GitHub: https://github.com/KawaroX/fox-and-rabbit
+ */
+
 function debounce(func, wait) {
     let timeout;
     return function executedFunction(...args) {

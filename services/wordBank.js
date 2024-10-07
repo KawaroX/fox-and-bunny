@@ -1,3 +1,11 @@
+/*
+ * 狐狸与小白兔
+ * Copyright (c) 2024 Luwavic
+ * 作者: Luwavic
+ * 许可证: MIT License
+ * GitHub: https://github.com/KawaroX/fox-and-rabbit
+ */
+
 const wordBank = {
     characters: [
       "小兔子", "狐狸", "狐狸和小白兔", "熊猫", "小鸟", "大象", "小猫", "小狗", "松鼠", "猴子", "青蛙",

@@ -1,3 +1,11 @@
+/*
+ * 狐狸与小白兔
+ * Copyright (c) 2024 Luwavic
+ * 作者: Luwavic
+ * 许可证: MIT License
+ * GitHub: https://github.com/KawaroX/fox-and-rabbit
+ */
+
 require('dotenv').config();
 const axios = require('axios');
 const Redis = require('ioredis');

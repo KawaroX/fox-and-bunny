@@ -1,3 +1,11 @@
+/*
+ * 狐狸与小白兔
+ * Copyright (c) 2024 Luwavic
+ * 作者: Luwavic
+ * 许可证: MIT License
+ * GitHub: https://github.com/KawaroX/fox-and-rabbit
+ */
+
 @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&family=ZCOOL+XiaoWei&display=swap');
 
 body, h1, button, .fox, .rabbit, .cloud, .sun {
@@ -594,4 +602,26 @@ input[type="text"]:focus {
     #story {
         padding: 20px;
     }
+}
+
+.copyright {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.7);
+    text-align: center;
+    padding: 10px 0;
+    font-size: 0.8em;
+    color: #333;
+    z-index: 1000;
+}
+
+.copyright a {
+    color: #FF6A88;
+    text-decoration: none;
+}
+
+.copyright a:hover {
+    text-decoration: underline;
 }

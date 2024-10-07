@@ -1,3 +1,11 @@
+/*
+ * 狐狸与小白兔
+ * Copyright (c) 2024 Luwavic
+ * 作者: Luwavic
+ * 许可证: MIT License
+ * GitHub: https://github.com/KawaroX/fox-and-rabbit
+ */
+
 document.addEventListener('DOMContentLoaded', () => {
     const scene = document.querySelector('.scene');
     const sun = document.querySelector('.sun');
@@ -13,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // 在动画结束时移除 bright 类
         setTimeout(() => {
             scene.classList.remove('bright');
-        }, 2500); // 2500ms = 2.5s，与动画持续时间相匹配
+        }, 2500);
     });
 
     // 云朵点击效果
@@ -38,6 +46,4 @@ document.addEventListener('DOMContentLoaded', () => {
         rabbit.classList.add('jump');
         setTimeout(() => rabbit.classList.remove('jump'), 1000);
     });
-
-    // 其他功能（如生成故事、切换自定义故事部分等）的代码应该保持不变
 });
