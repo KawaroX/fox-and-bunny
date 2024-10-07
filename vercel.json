@@ -1,11 +1,5 @@
 {
     "version": 2,
-    "builds": [
-      {
-        "src": "app.js",
-        "use": "@vercel/node"
-      }
-    ],
     "routes": [
       {
         "src": "/(.*)",
@@ -13,6 +7,8 @@
       }
     ],
     "functions": {
+        "src": "app.js",
+        "use": "@vercel/node",
         "api/custom-story.js": {
         "maxDuration": 60
         }
