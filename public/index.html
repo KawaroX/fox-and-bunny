@@ -149,18 +149,40 @@
             position: relative;
             overflow: hidden;
             line-height: 1.6;
-            white-space: pre-wrap;
-            transition: opacity 0.5s ease, transform 0.5s ease;
+            transition: all 0.5s ease-out;
+            max-height: 0;
+            opacity: 0;
         }
 
         #story.show {
             display: block;
-            animation: fadeInUp 0.5s ease-out;
+            max-height: 2000px; /* 设置一个较大的值 */
+            opacity: 1;
         }
 
         #story.hide {
-            animation: fadeOutDown 0.5s ease-out;
+            max-height: 0;
+            opacity: 0;
+            padding-top: 0;
+            padding-bottom: 0;
+            margin-top: 0;
         }
+
+        #storyContent {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+        }
+
+        #storyContent.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        #storyContent p {
+            margin-bottom: 10px;
+        }
+
 
         #story h2 {
             font-family: 'ZCOOL XiaoWei', 'Noto Serif SC', sans-serif;
@@ -347,6 +369,7 @@
                 storyContentElement.innerHTML = '<p class="loading">正在编织故事，请稍候...</p>';
                 storyElement.classList.remove('hide');
                 storyElement.classList.add('show');
+                storyContentElement.classList.remove('show');
 
                 const options = {
                     method: method,
@@ -365,12 +388,22 @@
                 if (!data.story) {
                     throw new Error('返回的数据中没有故事');
                 }
-                storyContentElement.innerHTML = marked.parse(data.story);
+                
+                // 移除段落之间的空行
+                const formattedStory = data.story.replace(/\n\n/g, '\n');
+                
+                storyContentElement.innerHTML = marked.parse(formattedStory);
                 storyElement.classList.remove('error');
+                
+                // 添加延迟以创建动画效果
+                setTimeout(() => {
+                    storyContentElement.classList.add('show');
+                }, 100);
             } catch (error) {
                 console.error('获取故事时出错:', error);
                 storyContentElement.innerHTML = '<p class="error">夕阳西下，故事消散了...请再次尝试编织你的故事。</p>';
                 storyElement.classList.add('error');
+                storyContentElement.classList.add('show');
             }
         }
 
@@ -390,10 +423,10 @@
         });
 
         closeStoryButton.addEventListener('click', () => {
-            storyElement.classList.remove('show');
             storyElement.classList.add('hide');
+            storyContentElement.classList.remove('show');
             setTimeout(() => {
-                storyElement.classList.remove('hide');
+                storyElement.classList.remove('show');
                 storyContentElement.innerHTML = '';
             }, 500);
         });
