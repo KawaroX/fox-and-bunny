@@ -6,7 +6,7 @@
     <title>狐狸和小白兔</title>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700&family=Noto+Serif+SC&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&family=ZCOOL+XiaoWei&display=swap');
         body, html {
             margin: 0;
             padding: 0;
@@ -130,7 +130,7 @@
         }
 
         h1 {
-            font-family: 'Noto Sans SC', sans-serif;
+            font-family: 'ZCOOL XiaoWei', 'Noto Serif SC', sans-serif;
             color: #ffffff;
             text-align: center;
             font-size: 3em;
@@ -139,17 +139,33 @@
         }
 
         #story {
+            display: none;
             background-color: rgba(255, 255, 255, 0.8);
             border: none;
             padding: 30px;
             margin-top: 30px;
             border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
             line-height: 1.6;
             white-space: pre-wrap;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        #story.show {
+            display: block;
+            animation: fadeInUp 0.5s ease-out;
+        }
+
+        #story.hide {
+            animation: fadeOutDown 0.5s ease-out;
+        }
+
+        #story h2 {
+            font-family: 'ZCOOL XiaoWei', 'Noto Serif SC', sans-serif;
+            color: #FF6A88;
+            margin-top: 0;
         }
 
         #closeStory {
@@ -161,34 +177,10 @@
             font-size: 20px;
             cursor: pointer;
             color: #FF6A88;
-            display: none;
         }
 
         #closeStory:hover {
             color: #ff4d6d;
-        }
-
-        #story h2 {
-            font-family: 'Noto Sans SC', sans-serif;
-            color: #FF6A88;
-            margin-top: 0;
-        }
-
-        #story::before {
-            content: '';
-            position: absolute;
-            top: -10px;
-            left: -10px;
-            right: -10px;
-            bottom: -10px;
-            background: inherit;
-            filter: blur(10px);
-            z-index: -1;
-        }
-
-        #story:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
         }
 
         .primary-button {
@@ -292,8 +284,15 @@
             }
         }
 
-        .fadeInUp {
-            animation: fadeInUp 0.5s ease-out;
+        @keyframes fadeOutDown {
+            from {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateY(20px);
+            }
         }
 
         @media (max-width: 600px) {
@@ -302,6 +301,9 @@
             }
             .fox, .rabbit {
                 font-size: 30px;
+            }
+            #story {
+                padding: 20px;
             }
         }
     </style>
@@ -342,9 +344,9 @@
         async function fetchStory(url, method = 'GET', body = null) {
             try {
                 // 显示加载提示
-                storyContentElement.innerHTML = '<p class="loading fadeInUp">正在编织故事，请稍候...</p>';
-                storyElement.style.display = 'block';
-                closeStoryButton.style.display = 'none';
+                storyContentElement.innerHTML = '<p class="loading">正在编织故事，请稍候...</p>';
+                storyElement.classList.remove('hide');
+                storyElement.classList.add('show');
 
                 const options = {
                     method: method,
@@ -365,11 +367,9 @@
                 }
                 storyContentElement.innerHTML = marked.parse(data.story);
                 storyElement.classList.remove('error');
-                storyContentElement.classList.add('fadeInUp');
-                closeStoryButton.style.display = 'block';
             } catch (error) {
                 console.error('获取故事时出错:', error);
-                storyContentElement.innerHTML = '<p class="error fadeInUp">夕阳西下，故事消散了...请再次尝试编织你的故事。</p>';
+                storyContentElement.innerHTML = '<p class="error">夕阳西下，故事消散了...请再次尝试编织你的故事。</p>';
                 storyElement.classList.add('error');
             }
         }
@@ -390,8 +390,12 @@
         });
 
         closeStoryButton.addEventListener('click', () => {
-            storyElement.style.display = 'none';
-            storyContentElement.innerHTML = '';
+            storyElement.classList.remove('show');
+            storyElement.classList.add('hide');
+            setTimeout(() => {
+                storyElement.classList.remove('hide');
+                storyContentElement.innerHTML = '';
+            }, 500);
         });
     </script>
 </body>
