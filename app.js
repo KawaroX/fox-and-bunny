@@ -107,15 +107,10 @@ async function getOrGenerateStory() {
 
     console.log('缓存状态:', { story: !!story, lastGenerationTime, currentTime });
 
-    // 立即返回缓存的故事
     if (story) {
       console.log('使用缓存的故事, 长度:', story.length);
-      // 检查生成时间是否超过5秒
-      if (lastGenerationTime && currentTime - parseInt(lastGenerationTime) > 5000) {
-        console.log('缓存的故事存在时间超过5秒，开始生成新故事');
-        // 生成新故事但不等待
-        generateAndCacheStory();
-      }
+      // 异步刷新故事，不等待结果
+      refreshStoryIfNeeded(lastGenerationTime, currentTime);
       return story; // 立即返回缓存的故事
     } else {
       console.log('没有找到缓存的故事，生成新故事');
@@ -130,23 +125,21 @@ async function getOrGenerateStory() {
   }
 }
 
-// 后台生成并缓存新故事的函数
-async function generateAndCacheStory() {
-  try {
-    console.log('开始后台生成新故事');
-    const newStory = await generateStory(); // 调用API生成新故事
-    const currentTime = Date.now();
-
-    // 确保新故事成功缓存
-    await redis.set('cached_story', newStory); // 更新缓存中的故事
-    await redis.set('last_generation_time', currentTime.toString()); // 更新生成时间
-    console.log('新故事已在后台生成并缓存');
-  } catch (error) {
-    console.error('后台生成新故事时出错:', error);
+async function refreshStoryIfNeeded(lastGenerationTime, currentTime) {
+  if (lastGenerationTime && currentTime - parseInt(lastGenerationTime) > 1000) {
+    console.log('缓存的故事存在时间超过1秒，开始生成新故事');
+    try {
+      const newStory = await generateStory();
+      await redis.set('cached_story', newStory);
+      await redis.set('last_generation_time', Date.now().toString());
+      console.log('新故事已生成并缓存');
+    } catch (error) {
+      console.error('刷新故事时出错:', error);
+    }
   }
 }
 
-
+// 在 app.get('/api/story', ...) 中使用新的 getOrGenerateStory 函数
 app.get('/api/story', async (req, res) => {
   try {
     console.log('收到获取故事的请求');
