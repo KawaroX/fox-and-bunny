@@ -11,5 +11,10 @@
         "src": "/(.*)",
         "dest": "/app.js"
       }
-    ]
+    ],
+    "functions": {
+        "api/custom-story.js": {
+        "maxDuration": 60
+        }
+    }
   }

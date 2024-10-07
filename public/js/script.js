@@ -30,22 +30,47 @@ async function fetchStory(url, method = 'GET', body = null) {
         }
 
         const data = await response.json();
-        if (data && data.story) {
+        
+        if (data.taskId) {
+            // 如果返回taskId，则开始轮询任务状态
+            await pollStoryStatus(data.taskId);
+        } else if (data.story) {
+            // 如果直接返回故事，则显示故事
             const formattedStory = data.story;
-
             loadingIndicator.classList.add('fadeOut');
             await new Promise(resolve => setTimeout(resolve, 500));
-
             storyContentElement.innerHTML = '';
             typeStory(formattedStory);
         } else {
-            throw new Error("返回的数据中没有故事");
+            throw new Error("返回的数据中没有故事或任务ID");
         }
     } catch (error) {
         console.error('获取故事时出错:', error);
         storyContentElement.innerHTML = '<p class="error">夕阳西下，故事消散了...请再次尝试编织你的故事。</p>';
         storyElement.classList.add('error');
     }
+}
+
+async function pollStoryStatus(taskId) {
+    const maxAttempts = 60; // 最多尝试60次，每次间隔1秒
+    let attempts = 0;
+    
+    while (attempts < maxAttempts) {
+        const response = await fetch(`/api/custom-story/status/${taskId}`);
+        const data = await response.json();
+        
+        if (data.status === 'completed') {
+            typeStory(data.story);
+            return;
+        } else if (data.status === 'error') {
+            throw new Error(data.message);
+        }
+        
+        attempts++;
+        await new Promise(resolve => setTimeout(resolve, 1000)); // 等待1秒
+    }
+    
+    throw new Error("生成故事超时");
 }
 
 function typeStory(story) {
@@ -102,9 +127,11 @@ function typeStory(story) {
 }
 
 generateButton.addEventListener('click', () => fetchStory('/api/story'));
+
 toggleCustomButton.addEventListener('click', () => {
     customStorySection.classList.toggle('show');
 });
+
 generateCustomButton.addEventListener('click', () => {
     const prompt = customPromptInput.value;
     if (!prompt) {
@@ -113,6 +140,7 @@ generateCustomButton.addEventListener('click', () => {
     }
     fetchStory('/api/custom-story', 'POST', { prompt });
 });
+
 closeStoryButton.addEventListener('click', () => {
     storyElement.classList.add('hide');
     storyContentElement.innerHTML = '';
