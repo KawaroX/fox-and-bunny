@@ -9,6 +9,9 @@ const app = express();
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// 设置 Express 信任代理
+app.set('trust proxy', 1);
+
 const { body, validationResult } = require('express-validator');
 const rateLimit = require('express-rate-limit');
 
@@ -16,21 +19,28 @@ const apiLimiter = rateLimit({
   windowMs: 5 * 60 * 1000,
   max: 30,
   message: '请求过于频繁，请稍后再试。',
-  trustProxy: true
+  standardHeaders: true,
+  legacyHeaders: false,
 });
 
 app.use('/api', apiLimiter);
 
-const redis = new Redis({
-  port: process.env.REDIS_PORT,
-  host: process.env.REDIS_HOST,
-  password: process.env.REDIS_PASSWORD,
+// 更灵活的 Redis 连接配置
+const redisOptions = process.env.REDIS_URL
+  ? process.env.REDIS_URL
+  : {
+      port: process.env.REDIS_PORT,
+      host: process.env.REDIS_HOST,
+      password: process.env.REDIS_PASSWORD,
+    };
+
+const redis = new Redis(redisOptions, {
   retryStrategy: function(times) {
     const delay = Math.min(times * 50, 2000);
     return delay;
   },
   maxRetriesPerRequest: 3,
-  connectTimeout: 10000,
+  connectTimeout: 20000,
   commandTimeout: 10000
 });
 
@@ -197,19 +207,5 @@ app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).send('Something broke!');
 });
-
-const port = process.env.PORT || 3000;
-
-// 添加这个函数来启动服务器
-function startServer() {
-  app.listen(port, () => {
-    console.log(`Server is running on http://localhost:${port}`);
-  });
-}
-
-// 如果不是在生产环境中，就启动服务器
-if (process.env.NODE_ENV !== 'production') {
-  startServer();
-}
 
 module.exports = app;
