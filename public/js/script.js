@@ -1,3 +1,16 @@
+// 在文件开头添加 debounce 函数
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
 let isTyping = false;
 let typingTimeout;
 
@@ -14,6 +27,9 @@ async function fetchStory(url, method = 'GET', body = null) {
     if (isTyping) {
         stopTyping();
     }
+
+    // 重置错误状态
+    storyElement.classList.remove('error');
     
     storyElement.classList.remove('hide');
     storyElement.classList.add('show');
@@ -55,6 +71,12 @@ async function fetchStory(url, method = 'GET', body = null) {
         storyElement.classList.add('error');
     }
 }
+
+// 创建 fetchStory 的防抖版本
+const debouncedFetchStory = debounce((url, method, body) => {
+    fetchStory(url, method, body);
+}, 300);
+
 
 async function pollStoryStatus(taskId) {
     const maxAttempts = 60;
@@ -141,11 +163,8 @@ function typeStory(story) {
     addNextCharacter();
 }
 
-generateButton.addEventListener('click', () => fetchStory('/api/story'));
-
-toggleCustomButton.addEventListener('click', () => {
-    customStorySection.classList.toggle('show');
-});
+// 修改事件监听器，使用防抖版本的 fetchStory
+generateButton.addEventListener('click', () => debouncedFetchStory('/api/story'));
 
 generateCustomButton.addEventListener('click', () => {
     const prompt = customPromptInput.value;
@@ -153,7 +172,11 @@ generateCustomButton.addEventListener('click', () => {
         alert('请在草原上编织你的故事...');
         return;
     }
-    fetchStory('/api/custom-story', 'POST', { prompt });
+    debouncedFetchStory('/api/custom-story', 'POST', { prompt });
+});
+
+toggleCustomButton.addEventListener('click', () => {
+    customStorySection.classList.toggle('show');
 });
 
 closeStoryButton.addEventListener('click', () => {
