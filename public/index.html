@@ -363,15 +363,11 @@
         const generateCustomButton = document.getElementById('generateCustomStory');
         const closeStoryButton = document.getElementById('closeStory');
 
-        // 修复自定义 marked 渲染器
-        const renderer = {
-            heading(text, level) {
-                // 所有标题都使用 h2
-                return `<h2>${text}</h2>`;
-            }
-        };
-
-        marked.use({ renderer });
+        // 移除自定义渲染器，使用默认的 marked 设置
+        marked.setOptions({
+            breaks: true,  // 将换行符转换为 <br>
+            gfm: true,     // 使用 GitHub 风格的 Markdown
+        });
 
         async function fetchStory(url, method = 'GET', body = null) {
             try {
@@ -399,7 +395,7 @@
                     throw new Error('返回的数据中没有故事');
                 }
                 
-                // 保持原有的段落格式，不进行额外处理
+                // 使用原始故事文本，不进行额外处理
                 const formattedStory = data.story;
                 
                 storyContentElement.innerHTML = marked.parse(formattedStory);
@@ -416,6 +412,7 @@
                 storyContentElement.classList.add('show');
             }
         }
+
 
         generateButton.addEventListener('click', () => fetchStory('/api/story'));
 
