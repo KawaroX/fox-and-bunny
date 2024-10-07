@@ -1,18 +1,15 @@
 {
     "version": 2,
-    "functions": {
-      "api/custom-story.js": {
-        "maxDuration": 60
-      },
-      "api/app.js": {
-        "maxDuration": 60,
-        "memory": 3008
+    "builds": [
+      {
+        "src": "app.js",
+        "use": "@vercel/node"
       }
-    },
+    ],
     "routes": [
       {
         "src": "/(.*)",
-        "dest": "/api/app.js"
+        "dest": "/app.js"
       }
     ]
   }
