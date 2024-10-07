@@ -70,11 +70,11 @@ async function generateStory(prompt = "请生成一个有趣的短篇故事") {
       messages: [
         { 
           role: "system", 
-          content: "你是一个专业的儿童故事作家。你的任务是创作富有想象力、有教育意义、适合儿童的短篇故事。故事应该包含引人入胜的情节、生动的描述和有趣的对话。每个故事应该有一个明确的主题或道德寓意，但要以巧妙和吸引人的方式呈现。故事长度应该在300到500字之间。文笔要优美语言流畅自然，颇有希金斯的风味，你的文字让人感觉像是秋天的落叶与清晨的雾气，在浩瀚璀璨的星海里飘荡着一叶孤舟，如银河般灿烂，如月球般纯洁，如月球海啸一般震撼。"
+          content: "你是一个获得了诺贝尔文学奖的儿童故事作家。你特别擅长创作富有想象力、有教育意义、适合儿童的短篇故事。故事应该包含引人入胜的情节、生动的描述和有趣的对话。每个故事应该有一个明确的主题或道德寓意，但要以巧妙和吸引人的方式呈现。故事长度应该在300到500字之间。文笔要优美语言流畅自然，颇有希金斯的风味，你的文字让人感觉像是秋天的落叶与清晨的雾气，在浩瀚璀璨的星海里飘荡着一叶孤舟，如银河般灿烂，如月球般纯洁，如月球海啸一般震撼。"
         },
         { 
           role: "user", 
-          content: `${enhancedPrompt}。注意，故事需要有一个题目，你要输出的只有题目和故事，不需要指出你的故事的寓意等，这些让读者通过阅读你的故事自己体会。题目用"## "表示` 
+          content: `${enhancedPrompt}。注意，故事需要有一个题目，你要输出的只有题目和故事，不需要指出你的故事的寓意等，这些让读者通过阅读你的故事自己体会。题目用"## "表示。你现在精神抖擞，文思泉涌，请写出高质量的作品吧！` 
         }
       ],
       max_tokens: 1000,
@@ -101,37 +101,39 @@ async function generateStory(prompt = "请生成一个有趣的短篇故事") {
 }
 
 async function getOrGenerateStory() {
-  try {
-    console.log('开始获取或生成故事');
+  console.log('开始获取或生成故事');
 
-    // 立即获取缓存的故事
-    let story = await redis.get('cached_story');
-    const lastGenerationTime = await redis.get('last_generation_time');
-    const currentTime = Date.now();
+  let story = await redis.get('cached_story');
+  const lastGenerationTime = await redis.get('last_generation_time');
+  const currentTime = Date.now();
 
-    console.log('缓存状态:', { story: !!story, lastGenerationTime, currentTime });
+  console.log('缓存状态:', { story: !!story, lastGenerationTime, currentTime });
 
-    if (story) {
-      console.log('使用缓存的故事, 长度:', story.length);
-      // 异步刷新故事，不等待结果
-      refreshStoryIfNeeded(lastGenerationTime, currentTime);
-      return story; // 立即返回缓存的故事
-    } else {
-      console.log('没有找到缓存的故事，生成新故事');
-      story = await generateStory(); // 如果没有缓存的故事，生成新的
+  if (story) {
+    console.log('使用缓存的故事, 长度:', story.length);
+    // 异步刷新故事，不等待结果
+    refreshStoryIfNeeded(lastGenerationTime, currentTime).catch(console.error);
+    return story;
+  } else {
+    console.log('没有找到缓存的故事，生成新故事');
+    try {
+      story = await Promise.race([
+        generateStory(),
+        new Promise((_, reject) => setTimeout(() => reject(new Error('故事生成超时')), 10000))
+      ]);
       await redis.set('cached_story', story);
       await redis.set('last_generation_time', currentTime.toString());
       return story;
+    } catch (error) {
+      console.error('生成新故事失败:', error);
+      return '抱歉，暂时无法生成新故事。请稍后再试。';
     }
-  } catch (error) {
-    console.error('获取或生成故事时出错:', error);
-    throw error;
   }
 }
 
 async function refreshStoryIfNeeded(lastGenerationTime, currentTime) {
-  if (lastGenerationTime && currentTime - parseInt(lastGenerationTime) > 1000) {
-    console.log('缓存的故事存在时间超过1秒，开始生成新故事');
+  if (lastGenerationTime && currentTime - parseInt(lastGenerationTime) > 60000) { // 1分钟
+    console.log('缓存的故事存在时间超过1分钟，开始生成新故事');
     try {
       const newStory = await generateStory();
       await redis.set('cached_story', newStory);
@@ -142,7 +144,6 @@ async function refreshStoryIfNeeded(lastGenerationTime, currentTime) {
     }
   }
 }
-
 // 在 app.get('/api/story', ...) 中使用新的 getOrGenerateStory 函数
 app.get('/api/story', async (req, res) => {
   try {
