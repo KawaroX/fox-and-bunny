@@ -52,7 +52,7 @@ async function generateStory(prompt = "请生成一个有趣的短篇故事") {
         }
         console.log(`生成故事：${enhancedPrompt}`);
 
-    const response = await axios.post('https://api.deepbricks.ai/v1/chat/completions', {
+    const response = await axios.post(`${process.env.OPENAI_API_BASE_URL}/v1/chat/completions`, {
       model: "gpt-4o-mini",
       messages: [
         {
