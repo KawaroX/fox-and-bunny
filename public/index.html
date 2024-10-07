@@ -139,7 +139,7 @@
         }
 
         #story {
-            display: none;
+            display: block;
             background-color: rgba(255, 255, 255, 0.8);
             border: none;
             padding: 30px;
@@ -155,7 +155,6 @@
         }
 
         #story.show {
-            display: block;
             max-height: 2000px; /* 设置一个较大的值 */
             opacity: 1;
         }
@@ -169,9 +168,14 @@
         }
 
         #storyContent {
-            opacity: 0;
+            opacity: 1;
             transform: translateY(20px);
             transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+        }
+
+        #storyContent.hide {
+            opacity: 0;
+            transform: translateY(20px);
         }
 
         #storyContent.show {
@@ -179,16 +183,20 @@
             transform: translateY(0);
         }
 
-        /* #storyContent p {
-            margin-bottom: 1em;
-        } */
-
         #storyContent h2 {
             text-align: center;
             margin-top: 1em;
             margin-bottom: 1em;
         }
+        
+        .story-content {
+            opacity: 0;
+            transition: opacity 0.5s ease-in;
+        }
 
+        .show {
+            opacity: 1;
+        }
 
         #closeStory {
             position: absolute;
@@ -292,6 +300,7 @@
         .loading {
             text-align: center;
             font-style: italic;
+            margin-bottom: 1em;
             color: #666;
         }
 
@@ -315,6 +324,45 @@
                 opacity: 0;
                 transform: translateY(20px);
             }
+        }
+        #storyContent h2 {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-top: 1em;
+    margin-bottom: 0.5em;
+}
+
+#storyContent p {
+    margin-bottom: 1em;
+}
+
+#storyContent span {
+    display: inline-block;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+        #loadingIndicator {
+            animation: fadeInUp 0.5s ease-out;
+        }
+
+        #loadingIndicator.fadeOut {
+            animation: fadeOutDown 0.5s ease-out forwards;
+        }
+
+        @keyframes ellipsis {
+            0% { content: '.'; }
+            33% { content: '..'; }
+            66% { content: '...'; }
+            100% { content: ''; }
+        }
+
+        #loadingIndicator::after {
+            content: '';
+            display: inline-block;
+            animation: ellipsis 1.5s infinite;
+            width: 20px;
+            text-align: left;
         }
 
         @media (max-width: 600px) {
@@ -347,9 +395,9 @@
             <input type="text" id="customPrompt" placeholder="在草原上编织你的故事...">
             <button id="generateCustomStory" class="secondary-button">生成自定义故事</button>
         </div>
-        <div id="story">
+        <div id="story" class="hide">
             <button id="closeStory">&times;</button>
-            <div id="storyContent"></div>
+            <div id="storyContent" class="story-content"></div>
         </div>
     </div>
 
@@ -363,20 +411,13 @@
         const generateCustomButton = document.getElementById('generateCustomStory');
         const closeStoryButton = document.getElementById('closeStory');
 
-        // 移除自定义渲染器，使用默认的 marked 设置
-        marked.setOptions({
-            breaks: true,  // 将换行符转换为 <br>
-            gfm: true,     // 使用 GitHub 风格的 Markdown
-        });
-
         async function fetchStory(url, method = 'GET', body = null) {
-            try {
-                // 显示加载提示
-                storyContentElement.innerHTML = '<p class="loading">正在编织故事，请稍候...</p>';
-                storyElement.classList.remove('hide');
-                storyElement.classList.add('show');
-                storyContentElement.classList.remove('show');
+            storyElement.classList.remove('hide');
+            storyElement.classList.add('show');
+            storyContentElement.innerHTML = '<div id="loadingIndicator" class="loading">正在编织故事，请稍候</div>';
+            const loadingIndicator = document.getElementById('loadingIndicator');
 
+            try {
                 const options = {
                     method: method,
                     headers: {
@@ -386,40 +427,96 @@
                 if (body) {
                     options.body = JSON.stringify(body);
                 }
+
                 const response = await fetch(url, options);
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
+
                 const data = await response.json();
-                if (!data.story) {
-                    throw new Error('返回的数据中没有故事');
+                if (data && data.story) {
+                    const formattedStory = data.story;
+
+                    loadingIndicator.classList.add('fadeOut');
+                    await new Promise(resolve => setTimeout(resolve, 500));
+
+                    storyContentElement.innerHTML = ''; // 清空内容以准备流式输出
+                    typeStory(formattedStory);
+                } else {
+                    throw new Error("返回的数据中没有故事");
                 }
-                
-                // 使用原始故事文本，不进行额外处理
-                const formattedStory = data.story;
-                
-                storyContentElement.innerHTML = marked.parse(formattedStory);
-                storyElement.classList.remove('error');
-                
-                // 添加延迟以创建动画效果
-                setTimeout(() => {
-                    storyContentElement.classList.add('show');
-                }, 100);
             } catch (error) {
                 console.error('获取故事时出错:', error);
                 storyContentElement.innerHTML = '<p class="error">夕阳西下，故事消散了...请再次尝试编织你的故事。</p>';
                 storyElement.classList.add('error');
-                storyContentElement.classList.add('show');
             }
         }
 
+        function typeStory(story) {
+            const paragraphs = story.split('\n\n'); // 按空行分割段落
+            let paragraphIndex = 0;
+            let charIndex = 0;
+            const delay = 15; // 每个字符的延迟，单位毫秒
+
+            storyContentElement.innerHTML = ''; // 清空原有内容
+            storyContentElement.classList.add('story-content');
+
+            // 初始化故事容器的高度
+            storyElement.style.height = '0px';
+
+            function addNextCharacter() {
+                if (paragraphIndex < paragraphs.length) {
+                    const paragraph = paragraphs[paragraphIndex];
+                    
+                    if (charIndex === 0) {
+                        // 检查是否为标题，同时保留 '#' 后的空格
+                        const isHeading = paragraph.startsWith('#');
+                        // 创建新的元素，如果是标题则使用 h2，否则使用 p
+                        const element = document.createElement(isHeading ? 'h2' : 'p');
+                        storyContentElement.appendChild(element);
+                    }
+
+                    if (charIndex < paragraph.length) {
+                        const char = paragraph[charIndex];
+                        const currentElement = storyContentElement.lastElementChild;
+                        
+                        // 创建 span 元素包裹每个字符，包括空格
+                        const span = document.createElement('span');
+                        span.textContent = char;
+                        span.style.opacity = '0';
+                        span.style.transition = 'opacity 0.4s ease-in-out';
+                        currentElement.appendChild(span);
+                        
+                        // 触发渐变动画
+                        setTimeout(() => {
+                            span.style.opacity = '1';
+                        }, 20);
+
+                        // 更新故事容器的高度
+                        storyElement.style.height = (storyContentElement.offsetHeight + 60) + 'px'; // 60px 为内边距
+                        
+                        charIndex++;
+                        setTimeout(addNextCharacter, delay);
+                    } else {
+                        // 当前段落结束，移到下一段
+                        paragraphIndex++;
+                        charIndex = 0;
+                        setTimeout(addNextCharacter, delay * 2); // 段落之间稍微多等一会
+                    }
+                } else {
+                    storyContentElement.classList.add('show');
+                    // 最后一次调整高度，确保所有内容都显示
+                    storyElement.style.height = (storyContentElement.offsetHeight + 60) + 'px';
+                }
+            }
+
+            addNextCharacter();
+        }
 
         generateButton.addEventListener('click', () => fetchStory('/api/story'));
-
         toggleCustomButton.addEventListener('click', () => {
             customStorySection.classList.toggle('show');
         });
-
         generateCustomButton.addEventListener('click', () => {
             const prompt = customPromptInput.value;
             if (!prompt) {
@@ -428,14 +525,9 @@
             }
             fetchStory('/api/custom-story', 'POST', { prompt });
         });
-
         closeStoryButton.addEventListener('click', () => {
             storyElement.classList.add('hide');
-            storyContentElement.classList.remove('show');
-            setTimeout(() => {
-                storyElement.classList.remove('show');
-                storyContentElement.innerHTML = '';
-            }, 500);
+            storyContentElement.innerHTML = '';
         });
     </script>
 </body>
