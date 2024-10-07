@@ -3,6 +3,7 @@ const express = require('express');
 const axios = require('axios');
 const Redis = require('ioredis');
 const path = require('path');
+const { getRandomWords } = require('./wordBank');  // 引入词库函数
 
 const app = express();
 app.use(express.json());
@@ -61,6 +62,9 @@ async function checkRedisConnection() {
 
 async function generateStory(prompt = "请生成一个有趣的短篇故事") {
   try {
+    const randomWords = getRandomWords(3);  // 获取3个随机词
+    const enhancedPrompt = `${prompt} 请在故事中包含以下元素：${randomWords.join('、')}`;
+
     const response = await axios.post('https://api.deepbricks.ai/v1/chat/completions', {
       model: "gpt-4o-mini",
       messages: [
@@ -70,11 +74,11 @@ async function generateStory(prompt = "请生成一个有趣的短篇故事") {
         },
         { 
           role: "user", 
-          content: `请根据以下提示创作一个故事：${prompt}。注意，故事需要有一个题目，你要输出的只有题目和故事，不需要指出你的故事的寓意等，这些让读者通过阅读你的故事自己体会。题目用“## ”表示` 
+          content: `${enhancedPrompt}。注意，故事需要有一个题目，你要输出的只有题目和故事，不需要指出你的故事的寓意等，这些让读者通过阅读你的故事自己体会。题目用"## "表示` 
         }
       ],
-      max_tokens: 1000,  // 增加 token 限制以允许更长的故事
-      temperature: 0.8   // 增加创造性
+      max_tokens: 1000,
+      temperature: 0.8
     }, {
       headers: {
         'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
