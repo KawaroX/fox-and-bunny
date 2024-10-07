@@ -180,15 +180,15 @@
         }
 
         #storyContent p {
-            margin-bottom: 10px;
+            margin-bottom: 0.5em;
         }
 
-
-        #story h2 {
-            font-family: 'ZCOOL XiaoWei', 'Noto Serif SC', sans-serif;
-            color: #FF6A88;
-            margin-top: 0;
+        #storyContent h2 {
+            text-align: center;
+            margin-top: 1em;
+            margin-bottom: 0.5em;
         }
+
 
         #closeStory {
             position: absolute;
@@ -363,6 +363,19 @@
         const generateCustomButton = document.getElementById('generateCustomStory');
         const closeStoryButton = document.getElementById('closeStory');
 
+        // 自定义 marked 渲染器
+        const renderer = new marked.Renderer();
+        renderer.heading = function(text, level) {
+            // 所有标题都使用 h2
+            return '<h2>' + text + '</h2>';
+        };
+
+        marked.setOptions({
+            renderer: renderer,
+            breaks: true,  // 将换行符转换为 <br>
+            gfm: true,     // 使用 GitHub 风格的 Markdown
+        });
+
         async function fetchStory(url, method = 'GET', body = null) {
             try {
                 // 显示加载提示
@@ -389,8 +402,8 @@
                     throw new Error('返回的数据中没有故事');
                 }
                 
-                // 移除段落之间的空行
-                const formattedStory = data.story.replace(/\n\n/g, '\n');
+                // 格式化故事文本，确保段落之间只有一个换行
+                const formattedStory = data.story.replace(/\n\s*\n/g, '\n');
                 
                 storyContentElement.innerHTML = marked.parse(formattedStory);
                 storyElement.classList.remove('error');
