@@ -150,14 +150,22 @@
             overflow: hidden;
             line-height: 1.6;
             white-space: pre-wrap;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.5s ease, transform 0.5s ease;
         }
 
-        #story.show {
-            opacity: 1;
-            transform: translateY(0);
+        #closeStory {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: #FF6A88;
+            display: none;
+        }
+
+        #closeStory:hover {
+            color: #ff4d6d;
         }
 
         #story h2 {
@@ -267,6 +275,27 @@
             text-align: center;
         }
 
+        .loading {
+            text-align: center;
+            font-style: italic;
+            color: #666;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fadeInUp {
+            animation: fadeInUp 0.5s ease-out;
+        }
+
         @media (max-width: 600px) {
             h1 {
                 font-size: 2.5em;
@@ -294,19 +323,29 @@
             <input type="text" id="customPrompt" placeholder="在草原上编织你的故事...">
             <button id="generateCustomStory" class="secondary-button">生成自定义故事</button>
         </div>
-        <div id="story"></div>
+        <div id="story">
+            <button id="closeStory">&times;</button>
+            <div id="storyContent"></div>
+        </div>
     </div>
 
     <script>
         const storyElement = document.getElementById('story');
+        const storyContentElement = document.getElementById('storyContent');
         const generateButton = document.getElementById('generateStory');
         const toggleCustomButton = document.getElementById('toggleCustomStory');
         const customStorySection = document.getElementById('customStorySection');
         const customPromptInput = document.getElementById('customPrompt');
         const generateCustomButton = document.getElementById('generateCustomStory');
+        const closeStoryButton = document.getElementById('closeStory');
 
         async function fetchStory(url, method = 'GET', body = null) {
             try {
+                // 显示加载提示
+                storyContentElement.innerHTML = '<p class="loading fadeInUp">正在编织故事，请稍候...</p>';
+                storyElement.style.display = 'block';
+                closeStoryButton.style.display = 'none';
+
                 const options = {
                     method: method,
                     headers: {
@@ -324,14 +363,13 @@
                 if (!data.story) {
                     throw new Error('返回的数据中没有故事');
                 }
-                storyElement.innerHTML = marked.parse(data.story);
+                storyContentElement.innerHTML = marked.parse(data.story);
                 storyElement.classList.remove('error');
-                storyElement.classList.remove('show');
-                void storyElement.offsetWidth; // 触发重排
-                storyElement.classList.add('show');
+                storyContentElement.classList.add('fadeInUp');
+                closeStoryButton.style.display = 'block';
             } catch (error) {
                 console.error('获取故事时出错:', error);
-                storyElement.textContent = '夕阳西下，故事消散了...请再次尝试编织你的故事。';
+                storyContentElement.innerHTML = '<p class="error fadeInUp">夕阳西下，故事消散了...请再次尝试编织你的故事。</p>';
                 storyElement.classList.add('error');
             }
         }
@@ -349,6 +387,11 @@
                 return;
             }
             fetchStory('/api/custom-story', 'POST', { prompt });
+        });
+
+        closeStoryButton.addEventListener('click', () => {
+            storyElement.style.display = 'none';
+            storyContentElement.innerHTML = '';
         });
     </script>
 </body>
