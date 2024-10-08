@@ -49,7 +49,7 @@ const STORY_QUEUE_KEY = 'story_queue';
 const STORY_POINTER_KEY = 'story_pointer';
 const QUEUE_SIZE = 8;
 const STORY_COOLDOWN = 20000;
-const STORY_GENERATION_TIMEOUT = 30000;
+const STORY_GENERATION_TIMEOUT = 10000;
 
 // API configuration
 const useOpenRouter = process.env.USE_OpenRouter === 'true' && process.env.OPENROUTER_API_KEY;
