@@ -6,6 +6,8 @@
  * GitHub: https://github.com/KawaroX/fox-and-rabbit
  */
 
+console.log("%c致从前一位朋友：这个项目的灵感和名字都来源于当时的聊天，希望你能喜欢，以及天天开心 :) 🦊🐰", "color: #FF6A88; font-style: italic; font-size: 14px;");
+
 function debounce(func, wait) {
     let timeout;
     return function executedFunction(...args) {
