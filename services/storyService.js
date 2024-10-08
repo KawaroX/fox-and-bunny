@@ -49,13 +49,13 @@ const STORY_QUEUE_KEY = 'story_queue';
 const STORY_POINTER_KEY = 'story_pointer';
 const QUEUE_SIZE = 8;
 const STORY_COOLDOWN = 20000;
-const STORY_GENERATION_TIMEOUT = 10000;
+const STORY_GENERATION_TIMEOUT = 9000;
 
 // API configuration
 const useOpenRouter = process.env.USE_OpenRouter === 'true' && process.env.OPENROUTER_API_KEY;
 const MAX_RETRIES = 1;
-const INITIAL_TIMEOUT = 10000; // 10 seconds
-const MAX_TIMEOUT = 30000; // 30 seconds
+const INITIAL_TIMEOUT = 9000; // 9 seconds
+const MAX_TIMEOUT = 27000; // 27 seconds
 
 // // 初始化 Google Generative AI
 // const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
