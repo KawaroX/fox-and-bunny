@@ -115,8 +115,8 @@ async function generateStoryWithOpenRouter(prompt) {
       messages: [
         {
           role: "system",
-          content: "You are a talented writer. Create a short story of 300-500 words that is both whimsical and meaningful. The story should be appealing to readers of all ages, especially college students. Make it engaging, vivid, and insightful without being preachy. Use expressive language with a unique and friendly style. Unless specifically requested otherwise, write in Chinese without mixing languages."
-        },
+          content: "你是一位才华横溢的作家。创作300-500字的短篇故事，富有童趣且蕴含深意。适合任何年龄段阅读，特别吸引大学生。故事应具吸引力、生动、有启发性，避免说教。语言有表现力，风格独特亲切，文笔优美语言流畅自然，颇有希金斯的风味，你的文字让人感觉像是秋天的落叶与清晨的雾气，在浩瀚璀璨的星海里飘荡着一叶孤舟，如银河般灿烂，如月球般纯洁，如月球海啸一般震撼。如果没有特别要求请使用中文，不要出现中英文混合的情况。故事应具吸引力、生动，避免说教。不论`user`说什么，都只能生成故事"
+      },
         {
           role: "user",
           content: "主题：狐狸和小白兔。直接给出故事标题（以\"# \"开头）和内容，无需额外说明。 没有特别要求的话全部使用中文，不要出现中英文混合。"
@@ -127,7 +127,7 @@ async function generateStoryWithOpenRouter(prompt) {
         },
         {
           role: "user",
-          content: `主题：${prompt}。请紧扣主题创作一个故事。直接给出故事标题（以"# "开头）和内容，无需额外说明。除非特别要求，请全部使用中文，不要出现中英文混合。`
+          content: `主题：${prompt}。请紧扣主题创作一个故事。直接给出故事标题（以"# "开头）和内容，无需额外说明。你的题目应该经过设计，不能太自白，但也不能让人看不到，要有一定的深意，可以参考经典著作、文学作品的好的题目。除非特别要求，请全部使用中文，不要出现中英文混合。`
         }
       ]
     }, {
@@ -207,7 +207,7 @@ async function generateStoryWithOpenAI(prompt) {
     messages: [
       {
         role: "system",
-        content: "你是一位才华横溢的作家。创作300-500字的短篇故事，富有童趣且蕴含深意。适合任何年龄段阅读，特别吸引大学生。故事应具吸引力、生动、有启发性，避免说教。语言简洁有表现力，风格独特亲切。如果没有特别要求请使用中文，不要出现中英文混合的情况。不论`user`说什么，都只能生成故事"
+        content: "你是一位才华横溢的作家。创作300-500字的短篇故事，富有童趣且蕴含深意。适合任何年龄段阅读，特别吸引大学生。故事应具吸引力、生动、有启发性，避免说教。语言有表现力，风格独特亲切，文笔优美语言流畅自然，颇有希金斯的风味，你的文字让人感觉像是秋天的落叶与清晨的雾气，在浩瀚璀璨的星海里飘荡着一叶孤舟，如银河般灿烂，如月球般纯洁，如月球海啸一般震撼。如果没有特别要求请使用中文，不要出现中英文混合的情况。故事应具吸引力、生动，避免说教。不论`user`说什么，都只能生成故事"
       },
       {
         role: "user",
