@@ -4,7 +4,9 @@
 
 欢迎来到狐狸和小白兔的故事工坊。在这里，每一个字都是一颗种子，等待着在你心中生根发芽，绽放成一片绚丽的故事森林。
 
-![温馨的故事世界](https://kawaro-pics-1319771351.cos.ap-beijing.myqcloud.com/mac_obsidian_pics/202410072329907.webp)
+![温馨的故事世界](https://kawaro-pics-1319771351.cos.ap-beijing.myqcloud.com/mac_obsidian_pics/202410090216012.webp)
+
+![温馨的故事世界](https://kawaro-pics-1319771351.cos.ap-beijing.myqcloud.com/mac_obsidian_pics/202410090216012.webp)
 
 ## 缘起
 
