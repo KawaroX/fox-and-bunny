@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>狐狸和小白兔</title>
     <link rel="stylesheet" href="css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 <body>
@@ -25,7 +26,7 @@
         <div class="scene-overlay"></div>
     </div>
     <div class="container">
-        <h1 class="scene-title">想要来点故事吗<br>以及做个好梦 :D</h1>
+        <h1 class="scene-title">要来点故事吗<br>以及做个好梦 :D</h1>
         <button id="generateStory" class="primary-button">生成随机故事</button>
         <button id="toggleCustomStory" class="secondary-button">创作独特故事</button>
         <div id="customStorySection">
@@ -39,33 +40,10 @@
     </div>
     <script src="js/script.js"></script>
     <script src="js/interactive-scene.js"></script>
-    <script src="js/story-notes.js"></script>
-    <div class="story-notes-container">
-        <div class="story-note" data-story="1">
-            <div class="story-note-content">
-                在一个阳光明媚的早晨，森林里弥漫着清新的气息...
-            </div>
-        </div>
-        <div class="story-note" data-story="2">
-            <div class="story-note-content">
-                校园里的大树下，一个男孩坐在草地上，手中捏着一张白纸...
-            </div>
-        </div>
-        <div class="story-note" data-story="3">
-            <div class="story-note-content">
-                © 2024 狐狸与小白兔<br>
-                Created by Luwavic | <a href="https://github.com/KawaroX/fox-and-rabbit" target="_blank">GitHub</a>
-            </div>
-        </div>
-    </div>
-    
-    <div class="story-note-full">
-        <button class="close-button">&times;</button>
-        <h3></h3>
-        <p></p>
-    </div>
-    
-    <div class="overlay"></div>
-
+    <footer class="copyright">
+        <a href="https://github.com/KawaroX/fox-and-rabbit" target="_blank">
+          <p>© 2024 Luwavic • 狐狸和小白兔 • <span style="font-weight: bold; color: #FF6A88;">GitHub</span></p>
+        </a>
+    </footer>
 </body>
 </html>

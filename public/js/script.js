@@ -35,9 +35,7 @@ async function fetchStory(url, method = 'GET', body = null) {
         stopTyping();
     }
 
-    // 重置错误状态
     storyElement.classList.remove('error');
-    
     storyElement.classList.remove('hide');
     storyElement.classList.add('show');
     storyContentElement.innerHTML = '<div id="loadingIndicator" class="loading">正在编织故事，请稍候</div>';
@@ -64,11 +62,10 @@ async function fetchStory(url, method = 'GET', body = null) {
         if (data.taskId) {
             await pollStoryStatus(data.taskId);
         } else if (data.story) {
-            const formattedStory = data.story;
             loadingIndicator.classList.add('fadeOut');
             await new Promise(resolve => setTimeout(resolve, 500));
             storyContentElement.innerHTML = '';
-            typeStory(formattedStory);
+            typeStory(data.story);
         } else {
             throw new Error("返回的数据中没有故事或任务ID");
         }
@@ -78,12 +75,6 @@ async function fetchStory(url, method = 'GET', body = null) {
         storyElement.classList.add('error');
     }
 }
-
-// 创建 fetchStory 的防抖版本
-const debouncedFetchStory = debounce((url, method, body) => {
-    fetchStory(url, method, body);
-}, 300);
-
 
 async function pollStoryStatus(taskId) {
     const maxAttempts = 60;
@@ -97,7 +88,7 @@ async function pollStoryStatus(taskId) {
             typeStory(data.story);
             return;
         } else if (data.status === 'error') {
-            throw new Error(data.message);
+            throw new Error(data.message || "生成故事时发生错误");
         }
         
         attempts++;
@@ -169,6 +160,8 @@ function typeStory(story) {
 
     addNextCharacter();
 }
+
+const debouncedFetchStory = debounce(fetchStory, 300);
 
 // 修改事件监听器，使用防抖版本的 fetchStory
 generateButton.addEventListener('click', () => debouncedFetchStory('/api/story'));
