@@ -33,11 +33,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function playSong() {
         if (!audioContext) initAudio();
+        musicToggle.classList.add('playing');
+        musicToggle.classList.remove('paused');
         audio.play().then(() => {
-            fadeIn(1);
+            fadeIn(2);
             isPlaying = true;
-            musicToggle.classList.add('playing');
-            musicToggle.classList.remove('paused');
             console.log('Playing class added:', musicToggle.classList.contains('playing')); // 添加这行
         }).catch(error => {
             console.error('Error playing audio:', error);
@@ -45,12 +45,12 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function pauseSong() {
-        fadeOut(1);
+        fadeOut(0.4);
+        musicToggle.classList.remove('playing');
+        musicToggle.classList.add('paused');
         setTimeout(() => {
             audio.pause();
             isPlaying = false;
-            musicToggle.classList.remove('playing');
-            musicToggle.classList.add('paused');
         }, 1000);
     }
 
