@@ -5,7 +5,7 @@
  * 许可证: MIT License
  * GitHub: https://github.com/KawaroX/fox-and-bunny
  */
- 
+
 .copyright {
     position: fixed;
     bottom: 15px;
@@ -22,7 +22,7 @@
     transition: all 0.3s ease;
     z-index: 10;
     animation: float 3s ease-in-out infinite;
-    min-width: 250px; /* 最小宽度为300px */
+    min-width: 300px; /* 最小宽度为300px */
     max-width: 90%; /* 最大宽度为视口的90% */
     overflow: hidden; /* 超出部分隐藏 */
     text-overflow: ellipsis; /* 超出部分显示省略号 */
