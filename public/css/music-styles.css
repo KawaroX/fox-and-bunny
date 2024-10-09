@@ -127,7 +127,7 @@
 @media (max-width: 768px) {
     .music-player {
         top: 10px; /* 增加底部距离，避免与版权信息重叠 */
-        left: -10px;
+        left: 5px;
         right: auto;
         font-size: small;
         transform: none;
