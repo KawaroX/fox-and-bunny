@@ -1,3 +1,11 @@
+/*
+ * 狐狸与小白兔
+ * Copyright (c) 2024 Luwavic
+ * 作者: Luwavic
+ * 许可证: MIT License
+ * GitHub: https://github.com/KawaroX/fox-and-bunny
+ */
+ 
 @keyframes brightnessChange {
     0%, 100% { filter: brightness(1); }
     3%, 97% { filter: brightness(1.05); }
@@ -51,7 +59,7 @@
     100% { transform: translateX(400px) rotate(-5deg); }
 }
 
-@keyframes rabbitMove {
+@keyframes bunnyMove {
     0% { transform: translateX(0) translateY(0) rotate(5deg); }
     25% { transform: translateX(-100px) translateY(-20px) rotate(-5deg); }
     50% { transform: translateX(-200px) translateY(0) rotate(5deg); }
@@ -64,7 +72,7 @@
     50% { transform: translateY(-20px); }
 }
 
-@keyframes rabbitJump {
+@keyframes bunnyJump {
     0%, 33%, 66%, 100% { transform: translateY(0); }
     16%, 50% { transform: translateY(-20px); }
 }

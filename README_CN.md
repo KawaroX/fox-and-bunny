@@ -29,7 +29,7 @@
 
 ### 网页版
 
-来[这里](https://fox-and-rabbit.kawaro.space)和我们见面吧。这是你故事冒险的起点。
+来[这里](https://fox-and-bunny.kawaro.space)和我们见面吧。这是你故事冒险的起点。
 
 1. 点击"生成随机故事"，让惊喜来敲门。每一次点击，都是一次未知的冒险。
 2. 选择"创作独特故事"，告诉我们你的想法。你的创意，我们的笔，一起谱写只属于你的独特篇章。
@@ -54,28 +54,28 @@
 
 #### 随机故事API
 
-**地址：** `GET https://fox-and-rabbit.kawaro.space/api/story`
+**地址：** `GET https://fox-and-bunny.kawaro.space/api/story`
 
 Python小伙伴可以这样召唤故事：
 ```python
 import requests
-response = requests.get("https://fox-and-rabbit.kawaro.space/api/story")
+response = requests.get("https://fox-and-bunny.kawaro.space/api/story")
 print(response.json())
 ```
 
 命令行魔法师可以试试：
 ```bash
-curl https://fox-and-rabbit.kawaro.space/api/story
+curl https://fox-and-bunny.kawaro.space/api/story
 ```
 
 #### 自定义故事API
 
-**地址：** `POST https://fox-and-rabbit.kawaro.space/api/custom-story`
+**地址：** `POST https://fox-and-bunny.kawaro.space/api/custom-story`
 
 Python示例，让我们一起编织梦想：
 ```python
 import requests
-url = "https://fox-and-rabbit.kawaro.space/api/custom-story"
+url = "https://fox-and-bunny.kawaro.space/api/custom-story"
 data = {"prompt": "一个关于友谊和勇气的暖心故事"}
 response = requests.post(url, json=data)
 print(response.json())
@@ -83,7 +83,7 @@ print(response.json())
 
 命令行示例，用指尖触碰故事的魔力：
 ```bash
-curl -X POST https://fox-and-rabbit.kawaro.space/api/custom-story \
+curl -X POST https://fox-and-bunny.kawaro.space/api/custom-story \
      -H "Content-Type: application/json" \
      -d '{"prompt": "一个关于友谊和勇气的暖心故事"}'
 ```
@@ -128,12 +128,12 @@ curl -X POST https://fox-and-rabbit.kawaro.space/api/custom-story \
 
 1. 把代码请到你家：
    ```
-   git clone https://github.com/KawaroX/fox-and-rabbit.git
+   git clone https://github.com/KawaroX/fox-and-bunny.git
    ```
 
 2. 准备好所需的工具：
    ```
-   cd fox-and-rabbit
+   cd fox-and-bunny
    npm install
    ```
 
@@ -152,7 +152,7 @@ curl -X POST https://fox-and-rabbit.kawaro.space/api/custom-story \
    ```
    或者用Vercel的GitHub自动部署：
 
-   [![用Vercel部署](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/KawaroX/fox-and-rabbit)
+   [![用Vercel部署](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/KawaroX/fox-and-bunny)
 
    别忘了在Vercel项目设置里填好所有环境变量哦。
 

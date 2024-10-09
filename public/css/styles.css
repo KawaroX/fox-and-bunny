@@ -3,12 +3,12 @@
  * Copyright (c) 2024 Luwavic
  * 作者: Luwavic
  * 许可证: MIT License
- * GitHub: https://github.com/KawaroX/fox-and-rabbit
+ * GitHub: https://github.com/KawaroX/fox-and-bunny
  */
 
 @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&family=ZCOOL+XiaoWei&display=swap');
 
-body, h1, button, .fox, .rabbit, .cloud, .sun {
+body, h1, button, .fox, .bunny, .cloud, .sun {
     user-select: none;
     -webkit-user-select: none;
     -moz-user-select: none;
@@ -279,7 +279,7 @@ body, html {
     z-index: 5;
 }
 
-.fox, .rabbit {
+.fox, .bunny {
     font-size: 50px;
     transition: animation-duration 0.5s ease;
     position: absolute;
@@ -291,12 +291,12 @@ body, html {
     left: 0;
 }
 
-.rabbit {
-    animation: rabbitMove 12s infinite alternate;
+.bunny {
+    animation: bunnyMove 12s infinite alternate;
     right: 0;
 }
 
-.fox.speed-up, .rabbit.speed-up {
+.fox.speed-up, .bunny.speed-up {
     animation-duration: 7.5s;
 }
 
@@ -308,7 +308,7 @@ body, html {
     100% { transform: translateX(400px) rotate(-5deg); }
 }
 
-@keyframes rabbitMove {
+@keyframes bunnyMove {
     0% { transform: translateX(0) translateY(0) rotate(5deg); }
     25% { transform: translateX(-100px) translateY(-20px) rotate(-5deg); }
     50% { transform: translateX(-200px) translateY(0) rotate(5deg); }
@@ -321,7 +321,7 @@ body, html {
     50% { transform: translateY(-20px); }
 }
 
-@keyframes rabbitJump {
+@keyframes bunnyJump {
     0%, 33%, 66%, 100% { transform: translateY(0); }
     16%, 50% { transform: translateY(-20px); }
 }
@@ -330,8 +330,8 @@ body, html {
     animation: foxJump 0.5s ease;
 }
 
-.rabbit.jump {
-    animation: rabbitJump 1s ease;
+.bunny.jump {
+    animation: bunnyJump 1s ease;
 }
 
 .scene-overlay {
@@ -588,7 +588,7 @@ input[type="text"]:focus {
 }
 
 @media (max-width: 600px) {
-    .fox, .rabbit {
+    .fox, .bunny {
         font-size: 30px;
     }
     #story {
@@ -596,7 +596,7 @@ input[type="text"]:focus {
     }
 }
 @media (max-width: 350px) {
-    .fox, .rabbit {
+    .fox, .bunny {
         font-size: 25px;
     }
     #story {

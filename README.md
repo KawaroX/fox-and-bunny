@@ -10,11 +10,11 @@ Welcome to the Fox and Rabbit Story Workshop. Here, every word is a seed waiting
 
 ## Origins
 
-"Why Fox and Rabbit?" you might ask. In countless fairy tales, foxes and rabbits are two of the most familiar and beloved characters. The fox often represents cunning and wit, while the rabbit symbolizes innocence and kindness.
+"Why Fox and Rabbit?" you might ask. In countless fairy tales, foxes and bunnys are two of the most familiar and beloved characters. The fox often represents cunning and wit, while the bunny symbolizes innocence and kindness.
 
 We chose these two characters as the name of our project because they evoke shared childhood memories. They are not just characters; they are cultural symbols, a universal language that transcends age and culture. In our story workshop, these seemingly opposing characters coexist harmoniously, symbolizing the world we hope to create—a world where wisdom and innocence, cleverness and kindness, dance together.
 
-Here, every story is a warm encounter, a perfect blend of the fox's wit and the rabbit's purity. We hope that both children and adults can find their own story here and feel the magic of fairy tales.
+Here, every story is a warm encounter, a perfect blend of the fox's wit and the bunny's purity. We hope that both children and adults can find their own story here and feel the magic of fairy tales.
 
 ## What We Offer
 
@@ -29,7 +29,7 @@ In the Fox and Rabbit Story Workshop, we offer:
 
 ### Web Version
 
-Come meet us [here](https://fox-and-rabbit.kawaro.space). This is the starting point of your story adventure.
+Come meet us [here](https://fox-and-bunny.kawaro.space). This is the starting point of your story adventure.
 
 1. Click on "Generate Random Story" and let surprise knock on your door. Every click is an unknown adventure.
 2. Choose "Create Unique Story" and tell us your ideas. Your creativity, our pen—together, we’ll write a chapter just for you.
@@ -44,7 +44,7 @@ I’ve created a shortcut that lets you quickly and easily get a story, although
 
 Whether you’re on your morning commute or enjoying a midday break, just tap once to summon a brand-new story. This shortcut is like a little magic pocket, always ready to add a splash of imagination to your daily life.
 
-Imagine this: while waiting for your coffee, or right before bed, a simple tap opens the door to a new adventure in words. Let the stories of the fox and rabbit be the small joys that brighten your life.
+Imagine this: while waiting for your coffee, or right before bed, a simple tap opens the door to a new adventure in words. Let the stories of the fox and bunny be the small joys that brighten your life.
 
 Ready? Let’s use this tiny shortcut to embark on your story journey!
 
@@ -54,28 +54,28 @@ For those who prefer to control the magic themselves, we offer a powerful API:
 
 #### Random Story API
 
-**URL:** `GET https://fox-and-rabbit.kawaro.space/api/story`
+**URL:** `GET https://fox-and-bunny.kawaro.space/api/story`
 
 Here's how Python enthusiasts can summon a story:
 ```python
 import requests
-response = requests.get("https://fox-and-rabbit.kawaro.space/api/story")
+response = requests.get("https://fox-and-bunny.kawaro.space/api/story")
 print(response.json())
 ```
 
 For command line wizards, try:
 ```bash
-curl https://fox-and-rabbit.kawaro.space/api/story
+curl https://fox-and-bunny.kawaro.space/api/story
 ```
 
 #### Custom Story API
 
-**URL:** `POST https://fox-and-rabbit.kawaro.space/api/custom-story`
+**URL:** `POST https://fox-and-bunny.kawaro.space/api/custom-story`
 
 Python example—let’s weave dreams together:
 ```python
 import requests
-url = "https://fox-and-rabbit.kawaro.space/api/custom-story"
+url = "https://fox-and-bunny.kawaro.space/api/custom-story"
 data = {"prompt": "A heartwarming story about friendship and courage"}
 response = requests.post(url, json=data)
 print(response.json())
@@ -83,7 +83,7 @@ print(response.json())
 
 Command line example—touch the magic of stories with your fingertips:
 ```bash
-curl -X POST https://fox-and-rabbit.kawaro.space/api/custom-story \
+curl -X POST https://fox-and-bunny.kawaro.space/api/custom-story \
      -H "Content-Type: application/json" \
      -d '{"prompt": "A heartwarming story about friendship and courage"}'
 ```
@@ -128,12 +128,12 @@ If you'd like to create your own storytelling haven, follow these steps:
 
 1. Bring the code home:
    ```
-   git clone https://github.com/KawaroX/fox-and-rabbit.git
+   git clone https://github.com/KawaroX/fox-and-bunny.git
    ```
 
 2. Get the tools ready:
    ```
-   cd fox-and-rabbit
+   cd fox-and-bunny
    npm install
    ```
 
@@ -152,7 +152,7 @@ If you'd like to create your own storytelling haven, follow these steps:
    ```
    Or use Vercel's GitHub auto-deploy:
 
-   [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/KawaroX/fox-and-rabbit)
+   [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/KawaroX/fox-and-bunny)
 
    Don’t forget to fill in all the environment variables in your Vercel project settings.
 

@@ -3,7 +3,7 @@
  * Copyright (c) 2024 Luwavic
  * 作者: Luwavic
  * 许可证: MIT License
- * GitHub: https://github.com/KawaroX/fox-and-rabbit
+ * GitHub: https://github.com/KawaroX/fox-and-bunny
  */
 
 console.log("%c致从前一位朋友：这个项目的灵感和名字都来源于当时的聊天，希望你能喜欢，以及天天开心 :) 🦊🐰", "color: #FF6A88; font-style: italic; font-size: 14px;");

@@ -3,7 +3,7 @@
  * Copyright (c) 2024 Luwavic
  * 作者: Luwavic
  * 许可证: MIT License
- * GitHub: https://github.com/KawaroX/fox-and-rabbit
+ * GitHub: https://github.com/KawaroX/fox-and-bunny
  */
 
 const express = require('express');

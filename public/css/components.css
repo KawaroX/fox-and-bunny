@@ -1,4 +1,12 @@
-.sun {
+/*
+ * 狐狸与小白兔
+ * Copyright (c) 2024 Luwavic
+ * 作者: Luwavic
+ * 许可证: MIT License
+ * GitHub: https://github.com/KawaroX/fox-and-bunny
+ */
+ 
+ .sun {
     position: absolute;
     width: 120px;
     height: 120px;
@@ -153,7 +161,7 @@
     z-index: 5;
 }
 
-.fox, .rabbit {
+.fox, .bunny {
     font-size: 50px;
     transition: animation-duration 0.5s ease;
     position: absolute;
@@ -165,12 +173,12 @@
     left: 0;
 }
 
-.rabbit {
-    animation: rabbitMove 12s infinite alternate;
+.bunny {
+    animation: bunnyMove 12s infinite alternate;
     right: 0;
 }
 
-.fox.speed-up, .rabbit.speed-up {
+.fox.speed-up, .bunny.speed-up {
     animation-duration: 7.5s;
 }
 
@@ -178,8 +186,8 @@
     animation: foxJump 0.5s ease;
 }
 
-.rabbit.jump {
-    animation: rabbitJump 1s ease;
+.bunny.jump {
+    animation: bunnyJump 1s ease;
 }
 
 .scene-overlay {

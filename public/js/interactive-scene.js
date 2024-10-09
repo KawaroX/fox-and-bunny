@@ -3,7 +3,7 @@
  * Copyright (c) 2024 Luwavic
  * 作者: Luwavic
  * 许可证: MIT License
- * GitHub: https://github.com/KawaroX/fox-and-rabbit
+ * GitHub: https://github.com/KawaroX/fox-and-bunny
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const sun = document.querySelector('.sun');
     const clouds = document.querySelectorAll('.cloud');
     const fox = document.querySelector('.fox');
-    const rabbit = document.querySelector('.rabbit');
+    const bunny = document.querySelector('.bunny');
 
     // 太阳点击效果
     sun.addEventListener('click', (e) => {
@@ -41,9 +41,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // 兔子点击效果
-    rabbit.addEventListener('click', (e) => {
+    bunny.addEventListener('click', (e) => {
         e.stopPropagation();
-        rabbit.classList.add('jump');
-        setTimeout(() => rabbit.classList.remove('jump'), 1000);
+        bunny.classList.add('jump');
+        setTimeout(() => bunny.classList.remove('jump'), 1000);
     });
 });

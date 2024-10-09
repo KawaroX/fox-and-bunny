@@ -1,3 +1,11 @@
+/*
+ * 狐狸与小白兔
+ * Copyright (c) 2024 Luwavic
+ * 作者: Luwavic
+ * 许可证: MIT License
+ * GitHub: https://github.com/KawaroX/fox-and-bunny
+ */
+
 document.addEventListener('DOMContentLoaded', function() {
     const audio = new Audio('../assets/mango_tea.mp3');
     const musicToggle = document.getElementById('musicToggle');
