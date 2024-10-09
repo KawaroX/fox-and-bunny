@@ -1,0 +1,105 @@
+
+.copyright {
+    position: fixed;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(5px);
+    border-radius: 20px;
+    padding: 8px 20px;
+    font-size: 14px;
+    font-family: 'Comfortaa', sans-serif;
+    color: rgba(0, 0, 0, 0.6);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    z-index: 10;
+    animation: float 3s ease-in-out infinite;
+    min-width: 250px; /* 最小宽度为300px */
+    max-width: 90%; /* 最大宽度为视口的90% */
+    overflow: hidden; /* 超出部分隐藏 */
+    text-overflow: ellipsis; /* 超出部分显示省略号 */
+}
+
+
+.copyright:hover {
+    background-color: rgba(255, 255, 255, 0.5);
+    transform: translateX(-50%) translateY(-8px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2), 0 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+.copyright a {
+    color: inherit;
+    text-decoration: none;
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.copyright p {
+    margin: 0;
+}
+
+.a-github {
+    color: #FF6A88;
+}
+
+.version-info {
+    position: absolute;
+    top: 10px;
+    right: -15px;
+    padding: 8px 20px;
+    animation: float 3s ease-in-out infinite;
+    color: transparent;
+    background-color: transparent;
+    backdrop-filter: blur(5px);
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 0.8em;
+    cursor: pointer;
+    z-index: 1000;
+    overflow: hidden;
+    transition: all 0.8s ease;
+    max-width: 30px;
+    max-height: 15px;
+  }
+  
+  .version-info:hover {
+    background-color: rgba(255, 255, 255, 0.4);
+    color: rgba(0, 0, 0, 0.5);
+  }
+  
+  .version-info.expanded {
+    animation: float 3s ease-in-out infinite;
+    max-width: 250px;
+    max-height: 200px;
+    color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(5px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2), 0 3px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .version-number {
+    display: block;
+    text-align: center;
+  }
+  
+  .version-details {
+    opacity: 0;
+    transition: opacity 0.8s ease;
+    padding-top: 10px;
+  }
+  
+  .expanded .version-details {
+    opacity: 1;
+  }
+  
+  .version-details h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+  }
+  
+  .version-details p {
+    margin: 5px 0;
+    font-size: 0.9em;
+  }

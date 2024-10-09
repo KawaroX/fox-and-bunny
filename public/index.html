@@ -7,19 +7,21 @@
     <title>狐狸和小白兔🦊🐰 </title>
     <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
     <link rel="alternate icon" href="assets/favicon.ico">
-    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/main.css">
+    <!-- <link rel="stylesheet" href="css/music-styles.css"> -->
+    <link href="https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 <body>
     <!-- 致一位曾经的朋友: 是你给予了这个故事灵感与力量，愿你的梦想如星光闪耀，以及天天开心🦊🐰  -->
     <div id="version-info" class="version-info">
-        <span class="version-number">v1.1.0</span>
+        <span class="version-number">v1.2.7</span>
         <div class="version-details">
           <h3>版本信息</h3>
-          <p>当前版本: v1.1.0</p>
+          <p>当前版本: v1.2.7</p>
           <p>最后更新: 2024-10-09</p>
-          <p>新功能: 添加版本号显示</p>
+          <p>新功能: 添加了音乐，可以点击💿播放</p>
         </div>
       </div>
     <div class="scene">
@@ -51,8 +53,21 @@
             <div id="storyContent" class="story-content"></div>
         </div>
     </div>
+
+    <div id="musicPlayer" class="music-player">
+        <button id="musicToggle" class="music-button">💿</button>
+        <div id="songInfo" class="song-info">
+            <img src="https://freetouse.com/data/track-artworks/@512/6144a6c57ac23.webp" alt="Album Cover" class="album-cover">
+            <p>Music: <span id="currentSong">mango tea</span> by <span id="currentArtist">massobeats</span></p>
+            <p>Source: <a href="https://freetouse.com/music" target="_blank">Free To Use Music</a></p>
+            <br>
+            <p><b>Click to Play</b></p>
+        </div>
+    </div>
+
     <script src="js/script.js"></script>
     <script src="js/interactive-scene.js"></script>
+    <script src="js/music-player.js"></script>
     <a href="https://github.com/KawaroX/fox-and-rabbit" target="_blank">
         <footer class="copyright">
             <p>© 2024 Luwavic • 狐狸和小白兔 • <span style="font-weight: bold; color: #FF6A88;">GitHub</span></p>

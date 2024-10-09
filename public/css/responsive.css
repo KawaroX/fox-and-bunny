@@ -1,0 +1,23 @@
+@media (max-width: 600px) {
+    .fox, .rabbit {
+        font-size: 30px;
+    }
+    #story {
+        padding: 20px;
+    }
+}
+@media (max-width: 350px) {
+    .fox, .rabbit {
+        font-size: 25px;
+    }
+    #story {
+        padding: 17px;
+    }
+}
+
+@media (max-width: 650px) {
+    .copyright {
+      padding: 6px 12px;
+      font-size: 12px;
+    }
+  }

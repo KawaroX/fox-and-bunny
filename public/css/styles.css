@@ -360,12 +360,13 @@ body, html {
 
 #story {
     display: block;
-    background-color: rgba(255, 255, 255, 0.8);
+    background-color: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(15px);
     border: none;
     padding: 30px;
     margin-top: 30px;
     border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2), 0 3px 6px rgba(0, 0, 0, 0.1);
     position: relative;
     overflow: hidden;
     line-height: 1.6;
@@ -452,7 +453,7 @@ body, html {
 
 .primary-button:hover {
     transform: translateY(-3px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2), 0 3px 6px rgba(0, 0, 0, 0.1);
 }
 
 .secondary-button {
@@ -636,7 +637,7 @@ input[type="text"]:focus {
 .copyright:hover {
     background-color: rgba(255, 255, 255, 0.5);
     transform: translateX(-50%) translateY(-8px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2), 0 3px 6px rgba(0, 0, 0, 0.1);
 }
 
 .copyright a {
@@ -662,52 +663,62 @@ input[type="text"]:focus {
     }
   }
 
-  .version-info {
-    position: fixed;
-    top: 10px;
-    right: 10px;
-    animation: float 3s ease-in-out infinite;
-    background-color: rgba(255, 255, 255, 0.4);
-    padding: 5px 10px;
-    border-radius: 15px;
-    font-size: 0.8em;
-    cursor: pointer;
-    z-index: 1000;
-    overflow: hidden;
-    transition: all 0.8s ease;
-    max-width: 50px;
-    max-height: 20px;
-  }
-  
-  .version-info.expanded {
-    animation: float 3s ease-in-out infinite;
-    max-width: 250px;
-    max-height: 200px;
-    background-color: white;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-  }
-  
-  .version-number {
-    display: block;
-    text-align: center;
-  }
-  
-  .version-details {
-    opacity: 0;
-    transition: opacity 0.8s ease;
-    padding-top: 10px;
-  }
-  
-  .expanded .version-details {
-    opacity: 1;
-  }
-  
-  .version-details h3 {
-    margin-top: 0;
-    margin-bottom: 10px;
-  }
-  
-  .version-details p {
-    margin: 5px 0;
-    font-size: 0.9em;
-  }
+.version-info {
+  position: absolute;
+  top: 10px;
+  right: -15px;
+  padding: 8px 20px;
+  animation: float 3s ease-in-out infinite;
+  color: transparent;
+  background-color: transparent;
+  backdrop-filter: blur(5px);
+  padding: 5px 10px;
+  border-radius: 15px;
+  font-size: 0.8em;
+  cursor: pointer;
+  z-index: 1000;
+  overflow: hidden;
+  transition: all 0.8s ease;
+  max-width: 30px;
+  max-height: 15px;
+}
+
+.version-info:hover {
+  background-color: rgba(255, 255, 255, 0.4);
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.version-info.expanded {
+  animation: float 3s ease-in-out infinite;
+  max-width: 250px;
+  max-height: 200px;
+  color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(5px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2), 0 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+.version-number {
+  display: block;
+  text-align: center;
+}
+
+.version-details {
+  opacity: 0;
+  transition: opacity 0.8s ease;
+  padding-top: 10px;
+}
+
+.expanded .version-details {
+  opacity: 1;
+}
+
+.version-details h3 {
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+.version-details p {
+  margin: 5px 0;
+  font-size: 0.9em;
+}

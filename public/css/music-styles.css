@@ -1,0 +1,150 @@
+.music-player {
+    position: fixed;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    animation: float-music 3s ease-in-out infinite;
+}
+
+.music-button {
+    font-size: 36px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    animation: float-music 3s ease-in-out infinite;
+}
+
+/* .music-button.playing {
+    animation: rotate 5s linear infinite, float-music 3s ease-in-out infinite;
+} */
+
+.music-button.playing {
+    animation: rotate 5s linear infinite;
+}
+
+.music-button.paused {
+    opacity: 0.5;
+}
+
+.music-button:hover {
+    transform: scale(1.1);
+}
+
+.song-info {
+    font-family: 'Indie Flower', cursive;
+    font-size: 16px;
+    color: #333;
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(15px);
+    padding: 10px;
+    border-radius: 15px;
+    margin-top: px;
+    max-width: 250px;
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    pointer-events: none;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2), 0 3px 6px rgba(0, 0, 0, 0.1);
+    animation: float-music 3s ease-in-out infinite;
+}
+
+.music-player:hover .song-info {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.music-player .song-info {
+    transition: opacity 0.3s ease, visibility 0s 0.3s;
+    visibility: hidden;
+}
+
+.music-player:hover .song-info {
+    transition: opacity 0.3s ease, visibility 0s;
+    visibility: visible;
+}
+
+.music-player:not(:hover) .song-info {
+    transition: opacity 0.3s ease, visibility 0s 2s;
+}
+
+.song-info a {
+    color: #FF6A88;
+    text-decoration: none;
+}
+
+.song-info p {
+    line-height: 1em;
+    margin: 5px 0;
+}
+
+.song-info a:hover {
+    text-decoration: underline;
+}
+
+@keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@keyframes float-music {
+    0% {
+        transform: translateY(-5px) ;
+    }
+    60% {
+        transform: translateY(0px);
+    }
+    100% {
+        transform: translateY(-5px);
+    }
+}
+
+/* 桌面端样式 */
+@media (min-width: 769px) {
+    .music-player {
+        bottom: 20px;
+        right: 20px;
+    }
+    
+    .song-info {
+        position: absolute;
+        min-width: 200px;
+        bottom: 100%;
+        right: 0;
+    }
+}
+
+/* 移动端样式 */
+@media (max-width: 768px) {
+    .music-player {
+        top: 10px; /* 增加底部距离，避免与版权信息重叠 */
+        left: 10px;
+        right: auto;
+        font-size: small;
+        transform: none;
+    }
+    
+    .song-info {
+        font-size: 14px;
+        max-width: 200px;
+        position: absolute;
+        width: 200px;
+        top: 100%;
+        left: 0;
+        right: auto;
+        transform: none;
+        margin-bottom: 10px;
+    }
+    .music-button {
+        font-size: 24px;
+    }
+}
+
+.album-cover {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin: 10px;
+}

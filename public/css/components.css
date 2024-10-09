@@ -1,0 +1,194 @@
+.sun {
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    background: #ffbf00;
+    border-radius: 50%;
+    top: 45%;
+    left: 50%;
+    transform: translateX(-50%);
+    box-shadow: 0 0 100px #ff4500;
+    animation: sunPulse 4s infinite alternate;
+    z-index: 3;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.sun:hover {
+    transform: translateX(-50%) scale(1.1);
+}
+
+.sunlight {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(
+        circle at center 45%,
+        rgba(255, 255, 190, 0.3) 0%,
+        rgba(255, 255, 190, 0.1) 20%,
+        rgba(255, 255, 190, 0) 60%
+    );
+    animation: sunlightPulse 8s infinite alternate;
+    z-index: 2;
+    pointer-events: none;
+}
+
+.cloud {
+    position: absolute;
+    background: white;
+    opacity: 0.8;
+    z-index: 4;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.cloud::before,
+.cloud::after {
+    content: '';
+    position: absolute;
+    background: inherit;
+}
+
+.cloud-1 {
+    width: 100px;
+    height: 40px;
+    top: 15%;
+    left: 10%;
+    border-radius: 40px;
+    animation: cloudFloat1 20s infinite alternate;
+}
+.cloud-1::before { width: 50px; height: 50px; top: -25px; left: 10px; border-radius: 50%; }
+.cloud-1::after { width: 70px; height: 70px; top: -35px; right: 10px; border-radius: 50%; }
+
+.cloud-2 {
+    width: 80px;
+    height: 30px;
+    top: 25%;
+    left: 80%;
+    border-radius: 30px;
+    animation: cloudFloat2 15s infinite alternate;
+}
+.cloud-2::before { width: 40px; height: 40px; top: -20px; left: 5px; border-radius: 50%; }
+.cloud-2::after { width: 55px; height: 55px; top: -30px; right: 5px; border-radius: 50%; }
+
+.cloud-3 {
+    width: 120px;
+    height: 45px;
+    top: 10%;
+    left: 30%;
+    border-radius: 45px;
+    animation: cloudFloat3 25s infinite alternate;
+}
+.cloud-3::before { width: 60px; height: 60px; top: -30px; left: 15px; border-radius: 50%; }
+.cloud-3::after { width: 80px; height: 80px; top: -40px; right: 15px; border-radius: 50%; }
+
+.cloud.bounce {
+    animation: cloudBounce 0.5s ease;
+}
+
+.grass-layer {
+    position: absolute;
+    left: -10%;
+    width: 120%;
+    overflow: hidden;
+    z-index: 2;
+}
+
+.grass-back {
+    height: 35%;
+    bottom: -5%;
+    z-index: 5;
+    background: linear-gradient(to bottom, #3d8b40, #2e7d32);
+    border-radius: 50% 60% 50% 40% / 100% 100% 0 0;
+}
+
+.grass-middle {
+    height: 38%;
+    bottom: -3%;
+    left: 5%;
+    z-index: 4;
+    background: linear-gradient(to bottom, #4CAF50, #45a049);
+    border-radius: 55% 45% 55% 45% / 100% 100% 0 0;
+}
+
+.grass-front {
+    height: 40%;
+    bottom: 0;
+    z-index: 3;
+    background: linear-gradient(to bottom, #66BB6A, #4CAF50);
+    border-radius: 40% 60% 40% 60% / 100% 100% 0 0;
+}
+
+.grass-layer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        linear-gradient(160deg, rgba(255,255,190,0.3) 0%, rgba(0,0,0,0) 40%),
+        linear-gradient(200deg, rgba(255,255,0,0.1) 0%, rgba(0,0,0,0) 30%),
+        repeating-linear-gradient(
+            80deg,
+            rgba(255,255,255,0.2) 0px,
+            rgba(255,255,255,0.2) 2px,
+            transparent 2px,
+            transparent 4px
+        );
+    animation: grassShimmer 5s infinite linear;
+}
+
+.characters {
+    position: absolute;
+    bottom: 15%;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: flex-end;
+    gap: 20px;
+    width: 80%;
+    z-index: 5;
+}
+
+.fox, .rabbit {
+    font-size: 50px;
+    transition: animation-duration 0.5s ease;
+    position: absolute;
+    cursor: pointer;
+}
+
+.fox {
+    animation: foxMove 15s infinite alternate;
+    left: 0;
+}
+
+.rabbit {
+    animation: rabbitMove 12s infinite alternate;
+    right: 0;
+}
+
+.fox.speed-up, .rabbit.speed-up {
+    animation-duration: 7.5s;
+}
+
+.fox.jump {
+    animation: foxJump 0.5s ease;
+}
+
+.rabbit.jump {
+    animation: rabbitJump 1s ease;
+}
+
+.scene-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 6;
+    background: transparent;
+    pointer-events: none;
+}

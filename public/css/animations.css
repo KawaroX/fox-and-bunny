@@ -1,0 +1,105 @@
+@keyframes brightnessChange {
+    0%, 100% { filter: brightness(1); }
+    3%, 97% { filter: brightness(1.05); }
+    7%, 93% { filter: brightness(1.1); }
+    12%, 88% { filter: brightness(1.15); }
+    18%, 82% { filter: brightness(1.28); }
+    25%, 75% { filter: brightness(1.4); }
+    50% { filter: brightness(1.5); }
+}
+
+@keyframes sunPulse {
+    0% { transform: translateX(-50%) scale(1); opacity: 0.9; }
+    100% { transform: translateX(-50%) scale(1.1); opacity: 1; }
+}
+
+@keyframes sunlightPulse {
+    0% { opacity: 0.5; }
+    100% { opacity: 0.8; }
+}
+
+@keyframes cloudBounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+}
+
+@keyframes cloudFloat1 {
+    0% { transform: translate(0, 0); }
+    100% { transform: translate(50px, 20px); }
+}
+
+@keyframes cloudFloat2 {
+    0% { transform: translate(0, 0); }
+    100% { transform: translate(-30px, 10px); }
+}
+
+@keyframes cloudFloat3 {
+    0% { transform: translate(0, 0); }
+    100% { transform: translate(40px, -15px); }
+}
+
+@keyframes grassShimmer {
+    0% { transform: translateX(-20px); }
+    100% { transform: translateX(20px); }
+}
+
+@keyframes foxMove {
+    0% { transform: translateX(0) rotate(-5deg); }
+    25% { transform: translateX(100px) rotate(5deg); }
+    50% { transform: translateX(200px) rotate(-5deg); }
+    75% { transform: translateX(300px) rotate(5deg); }
+    100% { transform: translateX(400px) rotate(-5deg); }
+}
+
+@keyframes rabbitMove {
+    0% { transform: translateX(0) translateY(0) rotate(5deg); }
+    25% { transform: translateX(-100px) translateY(-20px) rotate(-5deg); }
+    50% { transform: translateX(-200px) translateY(0) rotate(5deg); }
+    75% { transform: translateX(-300px) translateY(-20px) rotate(-5deg); }
+    100% { transform: translateX(-400px) translateY(0) rotate(5deg); }
+}
+
+@keyframes foxJump {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+}
+
+@keyframes rabbitJump {
+    0%, 33%, 66%, 100% { transform: translateY(0); }
+    16%, 50% { transform: translateY(-20px); }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeOutDown {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+}
+
+@keyframes ellipsis {
+    0% { content: '.'; }
+    33% { content: '..'; }
+    66% { content: '...'; }
+    100% { content: ''; }
+}
+
+@keyframes float {
+    0% { transform: translateX(-50%) translateY(0px); }
+    50% { transform: translateX(-50%) translateY(-5px); }
+    100% { transform: translateX(-50%) translateY(0px); }
+}
