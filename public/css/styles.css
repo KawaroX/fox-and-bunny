@@ -655,10 +655,59 @@ input[type="text"]:focus {
     color: #FF6A88;
 }
 
-/* 添加媒体查询以在小屏幕上调整padding */
 @media (max-width: 650px) {
     .copyright {
       padding: 6px 12px;
       font-size: 12px;
     }
+  }
+
+  .version-info {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    animation: float 3s ease-in-out infinite;
+    background-color: rgba(255, 255, 255, 0.4);
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 0.8em;
+    cursor: pointer;
+    z-index: 1000;
+    overflow: hidden;
+    transition: all 0.8s ease;
+    max-width: 50px;
+    max-height: 20px;
+  }
+  
+  .version-info.expanded {
+    animation: float 3s ease-in-out infinite;
+    max-width: 250px;
+    max-height: 200px;
+    background-color: white;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  }
+  
+  .version-number {
+    display: block;
+    text-align: center;
+  }
+  
+  .version-details {
+    opacity: 0;
+    transition: opacity 0.8s ease;
+    padding-top: 10px;
+  }
+  
+  .expanded .version-details {
+    opacity: 1;
+  }
+  
+  .version-details h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+  }
+  
+  .version-details p {
+    margin: 5px 0;
+    font-size: 0.9em;
   }

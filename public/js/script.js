@@ -186,3 +186,18 @@ closeStoryButton.addEventListener('click', () => {
     storyElement.classList.add('hide');
     storyContentElement.innerHTML = '';
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+    const versionInfo = document.getElementById('version-info');
+    
+    versionInfo.addEventListener('click', function(event) {
+      event.stopPropagation();
+      this.classList.toggle('expanded');
+    });
+  
+    document.addEventListener('click', function(event) {
+      if (!versionInfo.contains(event.target)) {
+        versionInfo.classList.remove('expanded');
+      }
+    });
+  });
