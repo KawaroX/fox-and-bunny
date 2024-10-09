@@ -22,10 +22,3 @@
         padding: 17px;
     }
 }
-
-@media (max-width: 650px) {
-    .copyright {
-      padding: 6px 12px;
-      font-size: 12px;
-    }
-  }
