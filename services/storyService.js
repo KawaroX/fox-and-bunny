@@ -53,9 +53,9 @@ const STORY_GENERATION_TIMEOUT = 5000;
 
 // API configuration
 const useOpenRouter = process.env.USE_OpenRouter === 'true' && process.env.OPENROUTER_API_KEY;
-const MAX_RETRIES = 1;
+const MAX_RETRIES = 3;
 const INITIAL_TIMEOUT = 60000; 
-const MAX_TIMEOUT = 60000; 
+const MAX_TIMEOUT = 20000; 
 
 // // 初始化 Google Generative AI
 // const genAI = new Gemini(process.env.GEMINI_API_KEY);
@@ -78,8 +78,8 @@ async function generateStory(prompt = "请生成一个有趣的短篇故事") {
     let enhancedPrompt;
     console.log(`原始提示：${prompt}`);
     if (prompt === "请生成一个有趣的短篇故事") {
-      const randomWords = getRandomWords(3);
-      enhancedPrompt = `${prompt} 请在故事中包含以下元素：${randomWords.join('、')}`;
+      // const randomWords = getRandomWords(2);
+      enhancedPrompt = `${prompt} 符合正常逻辑，有内涵，让读者着迷。`; //请 在故事中包含以下元素：${randomWords.join('、')}
     } else {
       enhancedPrompt = prompt;
     }
@@ -89,9 +89,15 @@ async function generateStory(prompt = "请生成一个有趣的短篇故事") {
       try {
         return await retryOperation(() => generateStoryWithOpenRouter(enhancedPrompt));
       } catch (error) {
-        console.warn('OpenRouter API 生成失败，尝试使用 OpenAI API:', error.message);
-        return await retryOperation(() => generateStoryWithOpenAI(enhancedPrompt));
+        console.warn('OpenRouter API 生成失败，尝试使用 Claude API:', error.message);
+        try {
+          return await retryOperation(() => generateStoryWithClaude(enhancedPrompt));
+        } catch (error) {
+          console.error('Claude API 生成失败，尝试使用 OpenAI API:', error.message);
+          return await retryOperation(() => generateStoryWithOpenAI(enhancedPrompt));
+        }
       }
+
     } else {
       return await retryOperation(() => generateStoryWithOpenAI(enhancedPrompt));
     }
@@ -189,6 +195,39 @@ async function retryOperation(operation) {
       timeout = Math.min(timeout * 2, MAX_TIMEOUT);
     }
   }
+}
+
+async function generateStoryWithClaude(prompt) {
+  console.log(`Claude API 调用开始，提示：${prompt}`);
+  const startTime = Date.now();
+  const response = await axios.post(`${process.env.OPENAI_API_BASE_URL}/v1/chat/completions`, {
+    model: "claude-3.5-sonnet",
+    messages: [
+      {
+        role: "system",
+        content: "你是一位才华横溢的作家。创作300-500字的短篇故事，富有童趣且蕴含深意。适合任何年龄段阅读，特别吸引大学生。故事应具吸引力、生动、有启发性，避免说教。语言有表现力，风格独特亲切，文笔优美语言流畅自然，颇有希金斯的风味，你的文字让人感觉像是秋天的落叶与清晨的雾气，在浩瀚璀璨的星海里飘荡着一叶孤舟，如银河般灿烂，如月球般纯洁，如月球海啸一般震撼。如果没有特别要求请使用中文，不要出现中英文混合的情况。故事应具吸引力、生动，避免说教。不论`user`说什么，都只能生成故事"
+      },
+      {
+        role: "user",
+        content: `主题：${prompt}。一定要紧扣题目，生成故事。直接给出故事标题（以"# "开头，不需要书名号）和内容，无需额外说明。你的题目应该经过设计，不能太自白，但也不能让人看不到，要有一定的深意，可以参考经典著作、文学作品的好的题目。没有特别要求的话全部使用中文，不要出现中英文混合。`
+      }
+    ],
+    max_tokens: 800,
+    temperature: 0.7
+  }, {
+    headers: {
+      'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
+      'Content-Type': 'application/json'
+    },
+    timeout: MAX_TIMEOUT
+  });
+
+  if (!response.data?.choices?.[0]?.message?.content) {
+    throw new Error('Invalid Claude API response format');
+  }
+
+  console.log(`Claude API 调用完成，耗时: ${Date.now() - startTime}ms\n故事预览:\n${response.data.choices[0].message.content.slice(0, 100)}...`);
+  return response.data.choices[0].message.content.trim();
 }
 
 async function generateStoryWithOpenAI(prompt) {
