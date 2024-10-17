@@ -77,11 +77,11 @@ async function generateStory(prompt = "请生成一个有趣的短篇故事") {
   try {
     let enhancedPrompt;
     console.log(`原始提示：${prompt}`);
-    if (prompt === "请生成一个有趣的短篇故事") {
+    if (prompt === "请生成一个有趣的短篇故事。") {
       // const randomWords = getRandomWords(2);
-      enhancedPrompt = `${prompt} 符合正常逻辑，有内涵，让读者着迷。`; //请 在故事中包含以下元素：${randomWords.join('、')}
+      enhancedPrompt = `${prompt} 像是获得过诺贝尔文学奖的作家一样写作，作品有内涵，让读者着迷。`; //请 在故事中包含以下元素：${randomWords.join('、')}
     } else {
-      enhancedPrompt = prompt;
+      enhancedPrompt = `${prompt} 。像是获得过诺贝尔文学奖的作家一样写作，作品有内涵，让读者着迷。`;
     }
     console.log(`生成故事：${enhancedPrompt}`);
 
