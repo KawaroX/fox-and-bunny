@@ -87,7 +87,7 @@ async function generateStory(prompt = "请生成一个有趣的短篇故事") {
 
     if (useOpenRouter) {
       try {
-        return await retryOperation(() => generateStoryWithOpenRouter(enhancedPrompt));
+        return await retryOperation(() => generateStoryWithClaude(enhancedPrompt));
       } catch (error) {
         console.warn('OpenRouter API 生成失败，尝试使用 Claude API:', error.message);
         try {
@@ -200,7 +200,7 @@ async function retryOperation(operation) {
 async function generateStoryWithClaude(prompt) {
   console.log(`Claude API 调用开始，提示：${prompt}`);
   const startTime = Date.now();
-  const response = await axios.post(`${process.env.OPENAI_API_BASE_URL}/v1/chat/completions`, {
+  const response = await axios.post(`${process.env.OPENAI_API_BASE_URL}`, {
     model: "claude-3.5-sonnet",
     messages: [
       {
