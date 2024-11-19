@@ -53,7 +53,7 @@ const STORY_GENERATION_TIMEOUT = 5000;
 
 // API configuration
 const useOpenRouter = process.env.USE_OpenRouter === 'true' && process.env.OPENROUTER_API_KEY;
-const MAX_RETRIES = 3;
+const MAX_RETRIES = 1;
 const INITIAL_TIMEOUT = 60000; 
 const MAX_TIMEOUT = 20000; 
 
@@ -89,11 +89,11 @@ async function generateStory(prompt = "请生成一个有趣的短篇故事") {
       try {
         return await retryOperation(() => generateStoryWithClaude(enhancedPrompt));
       } catch (error) {
-        console.warn('OpenRouter API 生成失败，尝试使用 Claude API:', error.message);
+        console.warn('Claude API 生成失败，尝试使用 Claude API:', error.message);
         try {
-          return await retryOperation(() => generateStoryWithClaude(enhancedPrompt));
+          return await retryOperation(() => generateStoryWithOpenRouter(enhancedPrompt));
         } catch (error) {
-          console.error('Claude API 生成失败，尝试使用 OpenAI API:', error.message);
+          console.error('OpenRouter API 生成失败，尝试使用 OpenAI API:', error.message);
           return await retryOperation(() => generateStoryWithOpenAI(enhancedPrompt));
         }
       }
@@ -200,7 +200,7 @@ async function retryOperation(operation) {
 async function generateStoryWithClaude(prompt) {
   console.log(`Claude API 调用开始，提示：${prompt}`);
   const startTime = Date.now();
-  const response = await axios.post(`${process.env.OPENAI_API_BASE_URL}`, {
+  const response = await axios.post(`${process.env.OPENAI_API_BASE_URL}/v1/chat/completions`, {
     model: "claude-3.5-sonnet",
     messages: [
       {
